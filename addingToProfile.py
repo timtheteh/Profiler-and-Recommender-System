@@ -139,26 +139,12 @@ def create_user_node(node_name):
         session.run("MERGE (n:User {name: $name}) RETURN n", parameters = {
                 "name": node_name,
             })
-        # print(result.single())
 
-def get_all_existing_entity_names_weights():
-    all_entity_names = {}
-    with graphDB.session() as session:
-        results = session.run("MATCH (n:Entity) RETURN n.name, n.word2vec")
-        if results:
-            for record in results:
-                all_entity_names[record['n.name']] = record['n.word2vec']
-            return all_entity_names
-        else:
-            return None
-    
+def calculate_weight(freq, rec):
+    return 
+
 # this function adds entities and their corresponding relationship links with users
-def add_entity_node(entity_name, user_name, all_existing_entity_names_vectors):
-    # first check if the entity is very similar to any entity node in the graph
-    # if very similar, don't add the entity. instead, add a relationship link between user and entity, 
-    # and add weight property
-    # else, add the entity if it does not already exist, add a relationship link between user and entity, 
-    # and add weight property
+def conditionally_add_entity_node(entity_name, user_name):
     with graphDB.session() as session:
         # first check if the entity in question already exists in the graph
         entity_exists = session.run("""
@@ -169,16 +155,43 @@ def add_entity_node(entity_name, user_name, all_existing_entity_names_vectors):
             })
         relationship_exists = session.run("""
             MATCH (node1:User {name: $user_name})-[rel:LIKES]-(node2:Entity {name: $entity_name}) 
-            RETURN rel.count""", user_name=user_name, entity_name=entity_name)
+            RETURN rel.count
+            """, parameters = {
+                "user_name": user_name,
+                "entity_name": entity_name
+            })
+        # if entity already exists, this means that the entity that the user searched for is 
+        # already a generic node (eg. Airforce planes). These nodes already preprocessed,
+        # meaning they are already connected with the "class" label nodes
         if entity_exists: 
+            # if the relationship between this node already exists, we will have update the 
+            # properties of the link between the entity in question and the user
             if relationship_exists:
                 new_count = relationship_exists['rel.count']
                 new_count += 1
-                session.run("MATCH (node1:User {name: $user_name})-[rel:LIKES]-(node2:Entity {name: $entity_name}) SET rel.count = $new_count RETURN rel.count", user_name=user_name, entity_name=entity_name)
-            # if there is an existing entity of the same name,
-            # form a connection between user_name & entity_name
-            
-            
+                weight = getWeight(new_count, days=0)
+                session.run("""
+                MATCH (node1:User {name: $user_name})-[rel:LIKES]-(node2:Entity {name: $entity_name}) 
+                SET rel.count = $new_count, rel.days = $days, rel.weight = $weight
+                RETURN rel.count
+                """, parameters = {
+                    "user_name": user_name,
+                    "entity_name": entity_name,
+                    "new_count": new_count,
+                    "days": 0, 
+                    "weight": weight
+                })
+            # else, if the entity already exists but there is no relationship between user and entity
+            # form a link with the desired properties (count, days, weight)
+        # if the entity does not exist
+        # 1. calculate the vector for the entity
+        # 2. create the entity node temporarily (with a vector property)
+        # 3. Do an apoc cosine similarity search to find the most similar "entity" node
+        # 4. If the similarity < threshold, leave the created node alone
+            # 4i. Do an apoc cosine cimilarity sarch with all the predefined "class" label nodes 
+                # and form a "similar" relationship between them
+        # 5. Else if the similarity > threshold, form a link between user and the most similar node
+            # 5i. Delete the created entity node in question
 
         result = session.run("MERGE (n:Entity {name: $name}) RETURN n", name=entity_name)
         print(result.single())
@@ -189,18 +202,24 @@ with open(filename, 'r') as f:
 user_queries = get_new_documents_user_inputs(datetimefromfile)
 print("User queries: ", user_queries)
 
-entities = []
+entities = {}
 for query in user_queries.keys():
-    prompt = createPrompt(query)
-    temperature = 0
     user_ip_address = user_queries[query][2]
     create_user_node(user_ip_address) #creates a user node only if it does not already exist
+    
+    freq = user_queries[query][0]
+    rec = today - user_queries[query][1]
 
-    answer = getVicunaAnswer(prompt, temperature)
-    json_answer = json.loads(answer)
-    entities_from_answer = json_answer["entities"]
+    prompt = createPrompt(query)
+    temperature = 0
+    vicuna_answer = getVicunaAnswer(prompt, temperature)
+
+    json_answer = json.loads(vicuna_answer)
+    entities_from_answer = json_answer["entities"] #this is a list
     for ent in entities_from_answer:
-        entities.append(ent)
+        entities[ent] = [freq, rec, user_ip_address]
+
+
 
 print("List of entities: ", entities)
     
