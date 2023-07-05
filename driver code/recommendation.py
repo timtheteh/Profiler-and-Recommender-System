@@ -2,11 +2,19 @@ import neo4j
 
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
-
 graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_username}", f"{dbms_password}"), encrypted=False)
-
 user_name = "127.0.0.1"
-graph_name = "test2"
+graph_name = "test6"
+testEntitiesToReduce = ["population", "Malaysia", "South-East Asia"]
+testEntitiesToBoost = ["Singapore", "World Conflicts"]
+
+def graphExists(graphName):
+    with graphDB.session() as session:
+        result = session.run(
+            'CALL gds.graph.exists($graphName)'
+        ,graphName=graphName)
+        exists = [ (record['exists']) for record in result]
+        return exists[0]
 
 def getAllExistingGraphs():
     with graphDB.session() as session:
@@ -46,9 +54,6 @@ def getUserInterestsAsSourceNodes(user_name):
             list_ids.append(record['id(ent)'])
         return list_ids
 
-sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
-print(sourceNodes, '\n')
-
 def personalisedPageRank(user_name, graph_name, dampingFactor):
     with graphDB.session() as session:
         result = session.run(           
@@ -81,5 +86,56 @@ def personalisedPageRank(user_name, graph_name, dampingFactor):
         print('relevant results: ', relevant_records, '\n')
         print('recommendations are: ', recommendations)
 
-# createPageRankGraph(graphName=graph_name)
+def testWeights(user_name, testEntitiesToReduce, testEntitiesToBoost):
+    for ent in testEntitiesToReduce:
+        with graphDB.session() as session:
+            session.run("""
+            MATCH (node1:User {name: $user_name})
+            MATCH (node2:Entity {name: $entity_name})
+            MATCH (node1)-[rel:LIKES]-(node2) 
+            SET rel.weight = $weight
+            """, parameters={
+                "user_name": user_name,
+                "entity_name": ent,
+                "weight": 0
+            })
+        with graphDB.session() as session:
+            session.run("""
+            MATCH (node2:Entity {name: $entity_name})
+            MATCH (node2)-[rel2:IS_SIMILAR_TO]-() 
+            SET rel2.weight = $weight
+            """, parameters={
+                "entity_name": ent,
+                "weight": 0
+            })
+    for ent in testEntitiesToBoost:
+        with graphDB.session() as session:
+            session.run("""
+            MATCH (node1:User {name: $user_name})
+            MATCH (node2:Entity {name: $entity_name})
+            MATCH (node1)-[rel:LIKES]-(node2) 
+            SET rel.weight = $weight
+            """, parameters={
+                "user_name": user_name,
+                "entity_name": ent,
+                "weight": 1
+            })
+        with graphDB.session() as session:
+            session.run("""
+            MATCH (node2:Entity {name: $entity_name})
+            MATCH (node2)-[rel2:IS_SIMILAR_TO]-() 
+            SET rel2.weight = $weight
+            """, parameters={
+                "entity_name": ent,
+                "weight": 1
+            })
+
+testWeights(user_name=user_name, testEntitiesToReduce=testEntitiesToReduce, testEntitiesToBoost=testEntitiesToBoost)
+
+if not graphExists(graphName=graph_name):
+    createPageRankGraph(graphName=graph_name)
+
+sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
+print(sourceNodes, '\n')
+
 personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85)
