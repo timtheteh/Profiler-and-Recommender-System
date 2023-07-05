@@ -4,7 +4,7 @@ dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
 graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_username}", f"{dbms_password}"), encrypted=False)
 user_name = "127.0.0.1"
-graph_name = "test6"
+graph_name = "test8"
 testEntitiesToReduce = ["population", "Malaysia", "South-East Asia"]
 testEntitiesToBoost = ["Singapore", "World Conflicts"]
 
@@ -130,7 +130,7 @@ def testWeights(user_name, testEntitiesToReduce, testEntitiesToBoost):
                 "weight": 1
             })
 
-testWeights(user_name=user_name, testEntitiesToReduce=testEntitiesToReduce, testEntitiesToBoost=testEntitiesToBoost)
+# testWeights(user_name=user_name, testEntitiesToReduce=testEntitiesToReduce, testEntitiesToBoost=testEntitiesToBoost)
 
 if not graphExists(graphName=graph_name):
     createPageRankGraph(graphName=graph_name)
