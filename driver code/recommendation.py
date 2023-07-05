@@ -4,7 +4,7 @@ dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
 graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_username}", f"{dbms_password}"), encrypted=False)
 user_name = "127.0.0.1"
-graph_name = "test8"
+graph_name = "test"
 testEntitiesToReduce = ["population", "Malaysia", "South-East Asia"]
 testEntitiesToBoost = ["Singapore", "World Conflicts"]
 
@@ -26,6 +26,7 @@ def getAllExistingGraphs():
         return graphList
 
 def createPageRankGraph(graphName):
+    deleteAllExistingGraphs()
     ''' create cypher graph for page rank'''
     print('creating pageRank cypher graph: ', graphName)
     with graphDB.session() as session:
@@ -130,12 +131,23 @@ def testWeights(user_name, testEntitiesToReduce, testEntitiesToBoost):
                 "weight": 1
             })
 
+def getAllExistingGraphs():
+    with graphDB.session() as session:
+        result = session.run(
+            'CALL gds.graph.list()'
+        )
+        graphList = [ (record['graphName']) for record in result]
+        return graphList
+
+def deleteAllExistingGraphs():
+    existingGraphs = getAllExistingGraphs()
+    with graphDB.session() as session:
+        for graphName in existingGraphs:
+            session.run('CALL gds.graph.drop($graphName)',graphName=graphName)
+
 # testWeights(user_name=user_name, testEntitiesToReduce=testEntitiesToReduce, testEntitiesToBoost=testEntitiesToBoost)
 
-if not graphExists(graphName=graph_name):
-    createPageRankGraph(graphName=graph_name)
-
+createPageRankGraph(graphName=graph_name)
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
-
 personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85)
