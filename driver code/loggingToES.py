@@ -15,7 +15,7 @@ def get_conv_log_filename():
 es_url = "https://localhost:9200"
 index="test2"
 username = "elastic"
-password = "Bpax3twWeqg3Tg*IH6pY"
+password = "e4uwp3kZm6maRubko8g0"
 data_list = []
 
 def bulk_index_log_data():
