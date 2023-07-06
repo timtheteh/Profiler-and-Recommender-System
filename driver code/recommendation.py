@@ -146,7 +146,6 @@ def deleteAllExistingGraphs():
             session.run('CALL gds.graph.drop($graphName)',graphName=graphName)
 
 # testWeights(user_name=user_name, testEntitiesToReduce=testEntitiesToReduce, testEntitiesToBoost=testEntitiesToBoost)
-
 createPageRankGraph(graphName=graph_name)
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
