@@ -29,7 +29,7 @@ class massUpdate:
             else:
                 return new_probability
 
-    def get_relationship_freq_id_rec_datetime(self):
+    def get_likes_relationship_freq_id_datetime(self):
         with graphDB.session() as session:
             result = session.run("""
             MATCH (node1:User)-[rel:LIKES]-(node2:Entity) 
@@ -41,9 +41,7 @@ class massUpdate:
                 new_records[record['id(rel)']] = [record['rel.freq'], record['node2.datetimeadded']]
             return new_records
 
-    # print(get_relationship_freq_id())
-
-    def update_all_relationship_properties(self, freq, id, rec, weight):
+    def update_all_likes_relationship_properties(self, freq, id, rec, weight):
         with graphDB.session() as session:
             session.run("""
                 MATCH (node1:User)-[rel:LIKES]-(node2:Entity) 
@@ -80,8 +78,8 @@ class massUpdate:
                 RETURN input, output
                 """)
 
-    def massUpdateGraphRelationships(self):
-        for id, properties in self.get_relationship_freq_id_rec_datetime().items():
+    def massUpdateGraphLikesRelationships(self):
+        for id, properties in self.get_likes_relationship_freq_id_datetime().items():
             freq, datetimeadded = properties[0], properties[1]
 
             datetime_object = datetime.datetime.strptime(datetimeadded, "%Y-%m-%dT%H:%M:%S")
@@ -94,13 +92,9 @@ class massUpdate:
             if rec > num_days_before_freq_reset*24*60*60:
                 freq = 0
                 weight = self.calculate_weight(freq=freq, rec=rec)
-                self.update_all_relationship_properties(freq=freq, id=id, rec=rec, weight=weight)
+                self.update_all_likes_relationship_properties(freq=freq, id=id, rec=rec, weight=weight)
             # else, the frequency of the search is still relevant
             else:
                 weight = self.calculate_weight(freq=freq, rec=rec)
-                self.update_all_relationship_properties(freq=freq, id=id, rec=rec, weight=weight)
+                self.update_all_likes_relationship_properties(freq=freq, id=id, rec=rec, weight=weight)
 
-x = massUpdate()
-# x.massUpdateGraphRelationships()
-# x.update_all_similar_relationship_properties()
-x.reverseDirectionOfAllLinks()
