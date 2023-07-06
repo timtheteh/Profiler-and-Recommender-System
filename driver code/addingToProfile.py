@@ -9,29 +9,45 @@ import fasttext
 import datetime
 import massUpdateLikesWeights
 
+### Databases ###
+# Elastic Search -> where logs are retrieved
 es_url = "https://localhost:9200"
 index="test2"
 es_username = "elastic"
 es_password = "e4uwp3kZm6maRubko8g0"
+# Neo4j graph database
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
-file_path = "./datetime.txt"
-filename = os.path.join(LOGDIR, f"{file_path}")
-FASTCHAT_ENDPOINT = "http://127.0.0.1:7861/v1/chat/completions"
 graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_username}", f"{dbms_password}"), encrypted=False)
-## change this to have less new nodes in graph. lower -> less new nodes
-threshold_for_similarity = 0.65
+
+### Parameters ###
+# Parameter 1 (for LLM): LLM temperature -> higher means more variation in answer, set to 0 for most consistent results
 vicuna_temperature = 0
-# change this to have gradual/drastic changes in probability
+# Parameter 2 (to see if entity in question is similar to any existing nodes): change this to have less new nodes in graph. lower -> less new nodes
+threshold_for_similarity = 0.65
+# Parameter 3 (for weights of LIKES relationship): change this to have gradual/drastic changes in probability of weights
 probability_rate = 0.5
-## change this to have node point to more classes
+# Parameter 4 (to see if entity in question is similar to any class nodes) change this to have node point to more classes
 class_threshold = 0.35
+# Parameter 5: after this number of days, frequency of query is no longer relevant and consequently, wieght of LIKES relationship is zero.
 num_days_before_freq_reset = 10
 
-# Load the downloaded FastText Model
+### Models ###
+# LLM Endpoint for generative chat completions / summary / entity extraction
+FASTCHAT_ENDPOINT = "http://127.0.0.1:7861/v1/chat/completions"
+# Sentence vectoriser (to generate vector embeddings of entities and classes)
 file_path = "/home/grace/grace/vicuna/FastChat/profiler/model.bin"
 sentence2vecModel = fasttext.load_model(file_path)
 
+##########################################################################################################################
+### Elastic Search Functions ###
+# Retrieve the datetime of the latest query in the logs
+file_path = "./datetime.txt"
+filename = os.path.join(LOGDIR, f"{file_path}")
+# Datetime of the latest query based on the last search is used as the basis to see if there are any new logs
+# Elastic search index is queried based on this datetime -> return any logs that have datetime greater than this datetime
+# These NEW logs are stored in user_queries
+# user_queries -> {query: frequency, datetime of message, user's ip address}
 def get_new_documents_user_inputs(timestamp):
     """Gets all documents in the index that were indexed after the specified document ID."""
     query = {
@@ -42,7 +58,7 @@ def get_new_documents_user_inputs(timestamp):
                     {
                         "range": {
                             "datetime": {
-                                "gt": timestamp
+                                "gte": timestamp
                             }
                         }
                     }
@@ -85,6 +101,9 @@ def get_new_documents_user_inputs(timestamp):
     print('latest datetime is: ', latest_datetime)
     return user_queries
 
+##########################################################################################################################
+### LLM Functions ###
+# Vicuna is used to extract the entities in a query
 def getVicunaAnswer(prompt_template, temperature):
     vicuna_response = requests.post(url=FASTCHAT_ENDPOINT, json={
         "model": "vicuna-7b",
@@ -100,6 +119,8 @@ def getVicunaAnswer(prompt_template, temperature):
     answer = response_dict["choices"][0]["message"]["content"]
     return answer
 
+# The prompt to Vicuna is crafted to try to get the intended result from vicuna
+# Intended result from this prompt: { "entities": ['entity1', 'entity2']}
 def createPrompt(text):
     return """
     Q: Extract the entity or entities in this question in JSON format: "How much is an iphone?"
@@ -146,6 +167,10 @@ def createPrompt(text):
     A: 
     """%(text)
 
+##########################################################################################################################
+### Node Creations ####
+# node with 'User' label is created. Its only property is its name
+# In our demo case, the name is the user's ip address eg. '127.0.0.1'
 def create_user_node(node_name):
     with graphDB.session() as session:
         session.run("MERGE (n:User {name: $name}) RETURN n", parameters = {
@@ -165,18 +190,80 @@ def create_entity_node(entity_name, vector, datetime):
             "datetime": datetime
         })
 
-### Draft 1 of weight calulcation function
-# def calculate_weight(freq, rec):
-#     freq_probability = 1 - math.exp(-probability_rate * freq)
-#     rec_probability = probability_rate * math.exp(-probability_rate * rec)
-#     new_probability = freq_probability+rec_probability
-#     if new_probability > 1:
-#         return 1
-#     elif new_probability < 0:
-#         return 0
-#     else:
-#         return new_probability
+##########################################################################################################################
+### Graph checks ###
+def check_existence_entity(entity_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (u:Entity {name: $entity_name})
+        WITH COUNT(u) > 0  as node_exists
+        RETURN node_exists
+        """, parameters={
+            "entity_name": entity_name
+        })
+        record = result.single()
+        return record['node_exists']    
 
+def check_existence_relationship(user_name, entity_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (node1:User {name: $user_name})-[rel:LIKES]-(node2:Entity {name: $entity_name}) 
+        WITH COUNT(rel) > 0 as relationship_exists
+        RETURN relationship_exists
+        """, parameters={
+            "user_name": user_name, 
+            "entity_name": entity_name
+        })
+        record = result.single()
+        return record['relationship_exists'] 
+
+def check_if_num_entities_is_one(entity_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (u:Entity {name: $entity_name})
+        WITH COUNT(u) > 1  as more_than_one_exists
+        RETURN node_exists
+        """, parameters={
+            "entity_name": entity_name
+        })
+        record = result.single()
+        return record['more_than_one_exists'] 
+
+##########################################################################################################################
+### Node Functions ###
+def get_relationship_freq(user_name, entity_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (node1:User {name: $user_name})-[rel:LIKES]-(node2:Entity {name: $entity_name}) 
+        RETURN rel.freq
+        """, parameters={
+            "user_name": user_name, 
+            "entity_name": entity_name
+        })
+        record = result.single()
+        return record['rel.freq']
+
+def delete_entity_node(entity_name):
+    with graphDB.session() as session:
+        session.run(""" 
+        MATCH (ent1:Entity {name: $entity_name})
+        DETACH DELETE ent1
+        """, parameters={
+            "entity_name": entity_name
+        })
+
+def update_entity_datetimeadded(entity_name, datetimeadded):
+    with graphDB.session() as session:
+        session.run("""
+            MATCH (node2:Entity {name: $entity_name}) 
+            SET node2.datetimeadded = $datetimeadded
+            """, parameters = {
+                "entity_name": entity_name,
+                "datetimeadded": datetimeadded
+            })
+        
+##########################################################################################################################
+### Relationship Functions###
 def calculate_weight(freq, rec):
     freq_probability = 1 - math.exp(-probability_rate * freq/2)
     print('freq_probability: ', freq_probability)
@@ -193,45 +280,7 @@ def calculate_weight(freq, rec):
         else:
             return new_probability
 
-def check_existence_entity(entity_name):
-    with graphDB.session() as session:
-        result = session.run("""
-        MATCH (u:Entity {name: $entity_name})
-        WITH COUNT(u) > 0  as node_exists
-        RETURN node_exists
-        """, parameters={
-            "entity_name": entity_name
-        })
-        record = result.single()
-        return record['node_exists']    
-
-def check_existence_relationship(user_name, entity_name):
-    with graphDB.session() as session:
-        result = session.run("""
-        MATCH (node1:User)-[rel:LIKES]-(node2:Entity) 
-        WHERE node1.name = '{user_name}' AND node2.name = '{entity_name}'
-        WITH COUNT(rel) > 0 as relationship_exists
-        RETURN relationship_exists
-        """, parameters={
-            "user_name": user_name, 
-            "entity_name": entity_name
-        })
-        record = result.single()
-        return record['relationship_exists']   
-
-def get_relationship_freq(user_name, entity_name):
-    with graphDB.session() as session:
-        result = session.run("""
-        MATCH (node1:User)-[rel:LIKES]-(node2:Entity) 
-        WHERE node1.name = '{user_name}' AND node2.name = '{entity_name}'
-        RETURN rel.freq
-        """, parameters={
-            "user_name": user_name, 
-            "entity_name": entity_name
-        })
-        record = result.single()
-        return record['rel_freq']
-
+# Update the LIKES relationship 
 def update_relationship_properties(user_name, entity_name, freq, rec, weight):
     with graphDB.session() as session:
         session.run("""
@@ -245,7 +294,7 @@ def update_relationship_properties(user_name, entity_name, freq, rec, weight):
                 "weight": weight
             })
 
-# LIKE relationship (from user -> entity)
+# Create LIKE relationship (from user -> entity)
 def create_link_user_entity(user_name, entity_name, freq, rec, weight):
     with graphDB.session() as session:
         session.run("""
@@ -279,16 +328,7 @@ def create_link_entity_user(user_name, entity_name, freq, rec, weight):
                 "weight": weight
             })
 
-def delete_entity_node(entity_name):
-    with graphDB.session() as session:
-        session.run(""" 
-        MATCH (ent1:Entity {name: $entity_name})
-        DETACH DELETE ent1
-        """, parameters={
-            "entity_name": entity_name
-        })
-
-# IS_SIMILAR_TO relationship (from entity -> class)
+# Create IS_SIMILAR_TO relationship (from entity -> class)
 def create_link_entity_class(entity_name, most_similar_class_name, most_similar_class_score):
     with graphDB.session() as session:
         session.run("""
@@ -318,18 +358,9 @@ def create_link_class_entity(entity_name, most_similar_class_name, most_similar_
             "similarity_score": most_similar_class_score
         })
 
-def check_if_num_entities_is_one(entity_name):
-    with graphDB.session() as session:
-        result = session.run("""
-        MATCH (u:Entity {name: $entity_name})
-        WITH COUNT(u) > 1  as more_than_one_exists
-        RETURN node_exists
-        """, parameters={
-            "entity_name": entity_name
-        })
-        record = result.single()
-        return record['more_than_one_exists'] 
-
+##########################################################################################################################
+### Similarity Functions ###
+# returns the entity node that the entity in question is more similar to {'entity': score}
 def get_most_similar_entity_node(entity_name):
     with graphDB.session() as session:
         result = session.run("""
@@ -344,6 +375,7 @@ def get_most_similar_entity_node(entity_name):
         ans = [record['ent2.name'], record['similarity']]
         return ans
 
+# returns the class node(s) that the entity in question is more similar to {'class': score}
 def get_most_similar_class_nodes(entity_name):
     with graphDB.session() as session:
         result = session.run("""
@@ -360,7 +392,47 @@ def get_most_similar_class_nodes(entity_name):
             new_records[record['ent2.name']] = record['similarity']
         return new_records
 
-# this function adds entities and their corresponding relationship links with users
+##########################################################################################################################
+# Main function to add entities 
+### Test Case 1 ###
+# 1. A node of the same name as the entity in question (EIQ) already exists
+# 2. There is an existing LIKES relationship between this node and the user
+# Action: update this relationship's properties (freq, rec, weight) based on logs
+# and update the datetimeadded of the entity
+
+### Test Case 2 ###
+# 1. A node of the same name as the entity in question (EIQ) already exists
+# 2. There is NO existing LIKES relationship between this node and the user
+# Action: form a new LIKES relationship between user and the entity 
+# and give its properties (freq, rec, weight) based on logs
+# and update the datetimeadded of the entity
+
+### Test Case 3 ###
+# 1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
+# Action: create the EIQ first with its corresponding vector embedding and datetimeadded
+# 2. Find the most similar existing entity node in the graph and its similarity score
+# 3. Similarity score is < threshold_for_similarity (not similar to any existing node)
+# Action: form a new LIKES relationship between user and EIQ 
+# and find the most similar 'Class' node(s) to link it to
+
+### Test Case 4 ###
+# 1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
+# Action: create the EIQ first with its corresponding vector embedding and datetimeadded
+# 2. Find the most similar existing entity node in the graph and its similarity score
+# 3. Similarity score is > threshold_for_similarity (there is already a node similar to EIQ)
+# 4. A relationship between user and this node already exists
+# Action: update this relationship's properties (freq, rec, weight) based on logs
+# and delete the EIQ
+
+### Test Case 5 ###
+# 1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
+# Action: create the EIQ first with its corresponding vector embedding and datetimeadded
+# 2. Find the most similar existing entity node in the graph and its similarity score
+# 3. Similarity score is > threshold_for_similarity (there is already a node similar to EIQ)
+# 4. A relationship between user and this node DOES NOT already exist
+# Action: form a new LIKES relationship between user and the entity 
+# and give its properties (freq, rec, weight) based on logs
+# and delete the EIQ
 def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, dateaddedorupdated):
     if check_existence_entity(entity_name): 
         # if the relationship between this node already exists, we will have to update the 
@@ -375,65 +447,49 @@ def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, 
         else:
             weight = calculate_weight(freq, rec)
             create_link_user_entity(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
-            # create_link_entity_user(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
     else:  # if the entity does not exist
         # 1. calculate the vector for the entity
         entityVector = sentence2vecModel.get_sentence_vector(entity_name)
         # 2. create the entity node temporarily (with the vector property)
         create_entity_node(entity_name, entityVector, datetime=dateaddedorupdated)
         # 3. Do an apoc cosine similarity search to find the most similar "entity" node
-        if not check_if_num_entities_is_one:
-            most_similar_node = get_most_similar_entity_node(entity_name=entity_name)
-            most_similar_node_name, most_similar_node_score = most_similar_node[0], most_similar_node[1]
-            # 4. If the similarity < threshold, this means that entity in question is unique
-            # leave the created node alone and form a link between user and the entity in question
-            if most_similar_node_score < threshold:
-                weight = calculate_weight(freq, rec)
-                create_link_user_entity(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
-                # create_link_entity_user(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
-                # 4i. Do an apoc cosine similarity sarch with all the predefined "class" label nodes 
-                # and form a "similar" relationship between them
-                # every node MUST BELONG TO A CLASS
-                most_similar_class_nodes = get_most_similar_class_nodes(entity_name=entity_name)
-                best_class_node = list(most_similar_class_nodes)[0]
-                best_class_node_score = list(most_similar_class_nodes.values())[0]
-                create_link_entity_class(entity_name=entity_name, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
-                # create_link_class_entity(entity_name=entity_name, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
-                for class_node, score in most_similar_class_nodes.items():
-                    if score > class_threshold:
-                        create_link_entity_class(entity_name=entity_name, most_similar_class_name=class_node, most_similar_class_score=score)
-                        # create_link_class_entity(entity_name=entity_name, most_similar_class_name=class_node, most_similar_class_score=score)
-            else:
-                # 5. Else if the similarity > threshold, form a link between user and the most similar node
-                # 5i. Delete the created entity node in question
-                # if the relationship between this node already exists, we will have to update the 
-                # properties of the link between the entity in question and the user
-                if check_existence_relationship(user_name=user_name, entity_name=most_similar_node_name):
-                    count = get_relationship_freq(user_name=user_name, entity_name=most_similar_node_name)
-                    new_count = count + freq
-                    weight = calculate_weight(new_count, rec)
-                    update_relationship_properties(user_name=user_name, entity_name=most_similar_node_name, freq=new_count, rec=rec, weight=weight)
-                # else, if the entity already exists but there is no relationship between user and entity
-                # form a link with the desired properties (count, days, weight)
-                else:
-                    weight = calculate_weight(freq, rec)
-                    create_link_user_entity(user_name=user_name, entity_name=most_similar_node_name, freq=freq, rec=rec, weight=weight)
-                    # create_link_entity_user(user_name=user_name, entity_name=most_similar_node_name, freq=freq, rec=rec, weight=weight)
-                delete_entity_node(entity_name=entity_name)
-        else:
+        most_similar_node = get_most_similar_entity_node(entity_name=entity_name)
+        most_similar_node_name, most_similar_node_score = most_similar_node[0], most_similar_node[1]
+        # 4. If the similarity < threshold, this means that entity in question is unique
+        # leave the created node alone and form a link between user and the entity in question
+        if most_similar_node_score < threshold:
             weight = calculate_weight(freq, rec)
             create_link_user_entity(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
             # create_link_entity_user(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
+            # 4i. Do an apoc cosine similarity sarch with all the predefined "class" label nodes 
+            # and form a "similar" relationship between them
+            # every node MUST BELONG TO A CLASS
             most_similar_class_nodes = get_most_similar_class_nodes(entity_name=entity_name)
             best_class_node = list(most_similar_class_nodes)[0]
             best_class_node_score = list(most_similar_class_nodes.values())[0]
             create_link_entity_class(entity_name=entity_name, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
             # create_link_class_entity(entity_name=entity_name, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
             for class_node, score in most_similar_class_nodes.items():
-                print("class_node: ", class_node, " score: ", score)
                 if score > class_threshold:
                     create_link_entity_class(entity_name=entity_name, most_similar_class_name=class_node, most_similar_class_score=score)
                     # create_link_class_entity(entity_name=entity_name, most_similar_class_name=class_node, most_similar_class_score=score)
+        else:
+            # 5. Else if the similarity > threshold, form a link between user and the most similar node
+            # 5i. Delete the created entity node in question
+            # if the relationship between this node already exists, we will have to update the 
+            # properties of the link between the entity in question and the user
+            if check_existence_relationship(user_name=user_name, entity_name=most_similar_node_name):
+                count = get_relationship_freq(user_name=user_name, entity_name=most_similar_node_name)
+                new_count = count + freq
+                weight = calculate_weight(new_count, rec)
+                update_relationship_properties(user_name=user_name, entity_name=most_similar_node_name, freq=new_count, rec=rec, weight=weight)
+            # else, if the entity already exists but there is no relationship between user and entity
+            # form a link with the desired properties (count, days, weight)
+            else:
+                weight = calculate_weight(freq, rec)
+                create_link_user_entity(user_name=user_name, entity_name=most_similar_node_name, freq=freq, rec=rec, weight=weight)
+                # create_link_entity_user(user_name=user_name, entity_name=most_similar_node_name, freq=freq, rec=rec, weight=weight)
+            delete_entity_node(entity_name=entity_name)
 
 #### Driver code ####
 # Get all NEW user_queries in dictionary -> {query: [count, datetime, ip_addr]}
@@ -465,7 +521,7 @@ if user_queries:
         for ent in entities_from_answer:
             entities[ent] = [freq, rec, user_ip_address, datetime_from_query]
     
-    print(entities)
+    print("entities are here: ", entities)
 
     for entity, entity_properties in entities.items():
         freq, rec, user, dateaddedorupdated = entity_properties[0], entity_properties[1], entity_properties[2], entity_properties[3]
@@ -474,6 +530,11 @@ if user_queries:
 else:
     print("No new user queries!")
 
-# after adding entities, do one run of mass update of relationships
-x = massUpdateLikesWeights.massUpdate()
-x.massUpdateGraphRelationships()
+# # after adding entities, do one run of mass update of relationships
+# x = massUpdateLikesWeights.massUpdate()
+# x.massUpdateGraphRelationships()
+
+
+
+
+
