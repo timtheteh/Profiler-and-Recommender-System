@@ -1,0 +1,160 @@
+admiralty
+alexandra
+alexandra hospital
+amoy quee camp
+ang mo kio
+army logistic base
+aye
+bedok
+bedok camp
+bedok camp 2
+bedok camp i
+bedok camp ii
+bedok reservoir
+bukit batok
+bukit panjang camp
+bukit timah
+changi
+changi air base
+changi bay
+changi naval base
+chinatown
+choa chu kang
+chong pang camp
+clementi
+clementi camp
+clementi loop
+cmpb
+deport road Camp
+depot road
+depot road camp
+dieppe barracks
+ecp
+fort canning reservoir
+geylang
+gleneagles
+gleneagles hospital
+gombak
+gombak base
+gombak road
+hendon camp
+hillview camp
+hindhede quarry
+hougang
+jurong
+jurong camp
+jurong camp i
+jurong camp ii
+jurong east
+jurong island
+kaki bukit camp
+kallang
+kallang river
+keat hong camp
+khatib camp
+khoo teck puat
+kje
+kk hospital
+kpe
+kranji
+kranji camp ii
+kranji camp iii
+ladang camp
+lim chu kang
+lim chu kang camp
+little india
+macpherson
+macritchie reservoir
+maju camp
+mandai
+mandai camp 2
+mandai hill camp
+mandai road
+mandai west Camp
+marine parade
+marsiling
+mount alvernia hospital
+mount elizabeth
+mount elizabeth Novena
+mowbray camp
+mowbray road
+muari camp
+murai camp
+national university hospital
+nee soon camp
+nee soon driclad
+newton
+ng teng fong
+novena
+old pier road
+orchard
+orchard road
+pandan reservoir
+pandan river
+pasir laba camp
+pasir ris
+pasir ris camp
+paya lebar
+paya lebar air base
+peirce reservoir
+pie
+pioneer road
+plab
+pulau tekong camp
+pulau ubin
+punggol
+queenstown
+rifle range camp
+rifle range road camp
+rochor
+rochor river
+rocky hill Camp
+rocky hill camp
+safti mi
+safti military institute
+science park
+selarang camp
+selarang ring road
+seletar
+seletar aerospace road
+seletar airport
+seletar camp
+sembawang
+sembawang air base
+sembawang camp
+sembawang naval base
+sembawang river
+sembawang road
+sengkang
+sentosa
+serangoon
+simpang
+singapore general hospital
+sle
+stagmont camp
+stagmont road
+sungei gedong camp
+tab
+tampines
+tan tock seng
+tanglin
+tanglin barracks
+tekong
+tekong island
+tengah air base
+tengah airbase
+thomson medical centre
+thye hua kwan
+transit road
+tuas
+tuas checkpoint
+tuas naval base
+ubi
+upper jurong road
+upper seletar reservoir
+west coast pier
+whampoa river
+woodlands
+woodlands checkpoint
+yishun
+yishun pond

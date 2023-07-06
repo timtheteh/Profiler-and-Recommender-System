@@ -1,0 +1,559 @@
+access
+access blocked
+access control system
+acecom
+adware
+aether
+agent
+aids
+air campaign
+airbase
+airbases
+aircraft
+ambulance
+ammunition
+analyst
+antenna
+antenna dish
+anti-vehicle device
+approval
+armour
+assets
+atomic
+authentication
+authorization
+backdoor
+bacteria
+baeysian
+baggage screening
+balance
+base engineering and maintainence
+base force protection
+base ground logistics
+base platform operability
+bcs capacity
+beethovan
+beethoven
+belly load
+biochemical
+biohazard
+biological
+blast
+blood
+bomb
+bombay
+bootkits
+botnet
+brisbane
+cameron
+campaign
+canada
+cap
+capacity
+capture
+captured
+car
+car bomb
+caster
+casualties
+category
+catering
+ccis
+cgh
+cia
+classnet
+classnet
+cmis
+cmt
+cnb
+co
+coc
+comd
+comms
+complex hd
+computer
+computer worm
+console
+console master
+consumption rate
+contagious
+contaminate
+contaminated
+cookhouse
+core
+counter
+counter measure
+counter unmanned aerial system
+counter unmanned aerial system (cuas)
+coy
+craft
+crash
+crashed
+critical events
+critical spares availability
+critical vocation
+csf
+csh
+csm
+csms
+csr
+css
+csscom
+cuas
+current balance
+cyber
+cyber defence grp
+cyber-attack
+data centre
+data network
+ddos
+death
+defcon
+defend
+defended
+defensibility
+denial of service
+destroy
+destroyed
+destroyer
+destruction
+diesel stockpile
+disbelieve
+discom
+disease
+disposition
+disruption
+dmr
+dmr radio
+dms
+dorscon green
+dorset
+dorset uhf
+dorset vhf
+drone
+drug
+drugged
+dsta
+dump truck
+e-cookhouse
+eacmt
+edef
+eds
+ehealth
+eims
+electrical
+email
+emart
+emergency
+emob
+encrypt
+encryption
+eprep
+eps
+es
+eteams
+evac
+evacuate
+evacuated
+evacuation
+evacuation status
+executive
+exit ctrl sys
+exploits
+explosion
+explosive
+f15
+f16
+f50
+fake
+fake news
+fbt
+fcep
+fcu
+fencer
+fh2000
+fire
+fire engine
+fires
+flander
+flavian
+flb
+forencis
+forklift
+foxboro
+fp
+fresh rations
+ft
+ftr
+ftr(pilot)
+ftr(wso)
+fuel
+fuel oil
+fulfillment
+fulfilment
+g550
+gas
+gbad
+gdn
+gdn astral
+gdn satcom
+gebiz
+generator
+geneva
+gmk
+gmlrs
+govt
+gp car
+gpl
+grc
+green
+groubd
+groubd support eqpt
+ground
+ground support eqpt
+gs
+gsmb
+gsmb test
+gssb
+gstb
+gsw
+gsw assets
+gt
+gw war
+h450
+hack
+hacked
+hacker
+hampton
+harris
+harris rf
+hartford
+hc
+heavy fuel
+heavy plant
+heli
+helicon
+heron
+hf
+hfd
+hfo
+hft
+high assurance guard
+hijack
+hijacked
+himars
+hlp
+hlvp
+hmct
+hoax
+hook
+hospital
+hospitals
+host ids
+hougang
+hunter
+hwz
+i-net
+iac
+iacres
+ibav
+icbm
+icoc
+ids
+idu
+ieh
+ifc
+iims
+ilbv
+imjs
+impact
+incendiary
+incident
+infect
+infected
+infection
+infectious
+influenza
+info hub
+injustice
+insufficient
+intcoc
+international
+intrude
+intruded
+intruder
+ioc
+iococ
+iotf
+ippt
+ippt rt
+ips
+isg
+items
+itms
+iwads
+iwf
+jamestown
+jerry cans
+jmed
+jmex
+jod
+joint
+joint msn
+juvena
+keylogger
+killed
+l2sg
+las
+leb
+leopard
+log
+logistic
+logistics
+logs
+m3g
+m3g raft
+maestro
+major
+malicious
+malware
+manoeuvre
+manpower
+maritime
+maritime campaign
+mayday
+mbeta
+mcr
+mcu
+mech
+mechanical
+mecs
+media
+medic
+medical
+medical centre
+medical centres
+medical logs
+microwave
+misfire
+missle
+mlh
+mmr
+mo
+mob plan
+mrf
+mrs
+mrtt
+msc
+msd
+msm
+mst
+mst capacity
+murder
+murdered
+murderer
+mustard gas
+myoasis
+nationalities
+natpol
+navy
+navy defence force
+navy support force
+nbc
+nbd
+ncp
+network
+network ids
+newspaper
+nh
+nlos
+no access
+nspay
+nsportal
+nst
+nuclear
+nuh
+nus
+oc
+odu
+omccmc
+omccoc
+omcs
+opb
+opc
+opg
+ops log
+ops spec
+ops web
+osc
+osen
+osn
+osn core wan links
+osn wan links
+ouv
+paces
+pae
+parasites
+pathogen
+payload
+pending evacuation
+pers
+personnel screening
+petrol
+petrol stockpile
+pgm
+phising
+pie
+pipebomb
+plant
+platforms
+plb
+po
+poison
+poisoned
+poisonous
+pollute
+polluted
+power
+primus
+production
+proj
+project
+projected balance
+prs
+psydef
+pulau
+pw
+radiation
+radio
+radioactivity
+radiological
+radios uhf
+radios vhf
+rand
+ransom
+ransomware
+ration
+rbt
+reader
+real time
+red
+redcon
+refrigerated
+refrigerated veh
+remaining targets
+replicates
+reserve
+reserve reserve
+resource
+resupply
+resups
+rights
+riskware
+rochor
+rocket
+rootkits
+rsm
+s-net
+sabotage
+sad
+satcom
+satellite
+savant
+sbab
+sc100
+seater
+security
+self defence
+self-defence
+senior analyst
+senior executive
+sensor
+sensors
+severe
+sf
+shoe
+shoe bomb
+singtel
+situation picture
+sle
+slwh
+smc
+smcc
+spare
+spares
+spares availability
+spc
+spy
+spyware
+sr
+ssmb
+ssoc
+sss
+st
+standby
+status
+stellar
+stk
+stkpile
+stm
+stockpile
+stockpile availability
+stomp
+submarine
+supply
+surveillance
+surveillance system
+sysops
+team 2ic
+team leader
+terrex
+threatcon
+tonix
+total
+traford
+trailer tanker
+transmission
+trojan
+trojan horse
+truck bomb
+truck tanker
+ttg
+ttr
+ttsh
+uav
+uda
+uhf
+ultra
+underhand
+unit
+unmanned
+vehicle
+vehicle screening
+vessel
+vhf
+victory
+virus
+vrc
+vulnerabilities
+watch ic
+water
+water reclamation plants
+watford
+wave
+weapon
+weaponization
+wired comms
+wired ep
+wireless
+wireless comms
+wireless spare
+wmd
+wog
+worms
+wounded
+wtf
+xml
+yellow
+yellowbox
+zombie
