@@ -1,6 +1,7 @@
 # Profiler-and-Recommender-System
 
 Goal: To recommend 'Documents' to 'Users'
+
 Solution: Enhance the graph by
 1. Enhancing user profiles (by adding user's interested entities into graoh along with a user-entity edge that has a weight calculated based on frequency and recency of query)
 2. Enhancing the the graph by adding entity-class relationships which help to improve the personalised pagerank algrithm
