@@ -34,6 +34,8 @@ def bulk_index_log_data():
 def schedule_bulk_index(seconds):
     schedule.every(seconds).seconds.do(bulk_index_log_data)
 
+### Driver code ###
+# while this file is running, it sends logs to elastic search every 5 seconds
 while True:
     bulk_index_log_data()
     time.sleep(5)
