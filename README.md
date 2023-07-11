@@ -1,4 +1,4 @@
-# Profiler-and-Recommender-System
+# Profiler and Recommender System
 
 Goal: To recommend 'Documents' to 'Users'
 
