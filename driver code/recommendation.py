@@ -3,7 +3,7 @@ import neo4j
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
 graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_username}", f"{dbms_password}"), encrypted=False)
-user_name = "127.0.0.1"
+user_name = "10.0.0.1"
 graph_name = "test"
 testEntitiesToReduce = ["population", "Malaysia", "South-East Asia"]
 testEntitiesToBoost = ["Singapore", "World Conflicts"]
@@ -55,7 +55,7 @@ def getUserInterestsAsSourceNodes(user_name):
             list_ids.append(record['id(ent)'])
         return list_ids
 
-def personalisedPageRank(user_name, graph_name, dampingFactor):
+def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecommend):
     with graphDB.session() as session:
         result = session.run(           
         """
@@ -80,7 +80,7 @@ def personalisedPageRank(user_name, graph_name, dampingFactor):
             total_score += record['score']
             if record['score'] > 0:
                 relevant_records[record['nodeId']] = [record['name'], record['label'], record['score']]
-            if record['label'][0] == 'Class':
+            if record['label'][0] == typeOfNodeToRecommend:
                 recommendations[record['nodeId']] = [record['name'], record['score']]
         print('the scores sum to: ', total_score, '\n')
         print('number of relevant results: ', len(relevant_records), '\n')
@@ -149,4 +149,4 @@ def deleteAllExistingGraphs():
 createPageRankGraph(graphName=graph_name)
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
-personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85)
+personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
