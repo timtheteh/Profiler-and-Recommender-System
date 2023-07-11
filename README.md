@@ -56,3 +56,6 @@ Action: form a new LIKES relationship between user and the entity and give its p
 Step 3: Recommendation
 Files: recommendation.py
   - runs a personalised pagerank algorithm to get the highest ranked document to recommend to user
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/759613c9-c60b-4305-a605-c8910c3a4300)
+Result: For user '127.0.0.1', the document recommended to it is 'Document 2'. For user '10.0.0.1', the document recommended to it is 'Document 3'.
