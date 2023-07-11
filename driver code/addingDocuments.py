@@ -8,6 +8,7 @@ import requests
 from fastchat.constants import LOGDIR
 import fasttext
 
+class_threshold = 0.7
 ### Databases ###
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -31,6 +32,15 @@ with open(locations_filename, 'r') as f:
     locations_string = f.read()
 locations = locations_string.split("\n")
 whitelist += locations
+### Predefined Classes ###
+whiteListChunks = [whitelist[x:x+70] for x in range(0, len(whitelist), 70)]
+count = 1
+predefined_classes = {}
+for chunk in whiteListChunks:
+    category_name = "Category "+str(count)
+    predefined_classes[category_name] = chunk
+    count+=1
+predefined_classes['Locations'] = locations
 
 def create_document_node(doc_name):
     with graphDB.session() as session:
@@ -102,6 +112,35 @@ def createPrompt(text):
 def get_random_keywords(n):
     return str(random.sample(whitelist, n))
 
+def get_most_similar_class_nodes(entity_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (ent1:Entity {name: $entity_name}),(ent2:Class)
+        WHERE ent1 <> ent2
+        WITH ent1, ent2, gds.similarity.cosine(ent1.vector,ent2.vector) as similarity
+        RETURN ent2.name, similarity ORDER BY similarity DESC LIMIT 5
+        """, parameters={
+            "entity_name": entity_name,
+        })
+        records = result.data()
+        new_records = {}
+        for record in records:
+            new_records[record['ent2.name']] = record['similarity']
+        return new_records
+
+def create_link_entity_class(entity_name, most_similar_class_name, most_similar_class_score):
+    with graphDB.session() as session:
+        session.run("""
+        MATCH (ent1:Entity {name: $entity_name})
+        MATCH (class:Class {name: $class_name})
+        MERGE (ent1)-[r1:IS_SIMILAR_TO]-(class)
+        SET r1.weight = $similarity_score
+        """, parameters={
+            "entity_name": entity_name,
+            "class_name": most_similar_class_name,
+            "similarity_score": most_similar_class_score
+        })
+
 list_vicuna_answers = []
 for i in range(5):
     random_keywords = get_random_keywords(5)
@@ -128,13 +167,17 @@ for textName, textContent in list_of_texts.items():
     textName_entities[textName] = []
     textContent = textContent.lower()
     for phrase in whitelist:
-        if (phrase+" ") in textContent and textContent.find(phrase) == 0:
+        if (" "+phrase+" ") in textContent:
+            textName_entities[textName].append(phrase)
+            continue
+        elif (phrase+" ") in textContent and textContent.find(phrase) == 0:
             textName_entities[textName].append(phrase)
             continue
         elif (phrase+" ") in textContent:
             for punctuation in punctuationList:
                 if (punctuation+phrase+" ") in textContent:
                     textName_entities[textName].append(phrase)
+                    break
             continue
         elif (" "+phrase) in textContent and textContent.rfind(phrase)+len(phrase)-1 == len(textContent)-1:
             textName_entities[textName].append(phrase)
@@ -143,17 +186,30 @@ for textName, textContent in list_of_texts.items():
             for punctuation in punctuationList:
                 if (" "+phrase+punctuation) in textContent:
                     textName_entities[textName].append(phrase)
+                    break
             continue
-        elif (" "+phrase+" ") in textContent:
-            textName_entities[textName].append(phrase)
-            continue
+        
 
 print("Document names and their entities: ", textName_entities, '\n')
 
-# for document, entity_list in textName_entities.items():
-#     create_document_node(document) #creates a user node only if it does not already exist
-#     now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-#     for entity in entity_list:
-#         entityVector = sentence2vecModel.get_sentence_vector(entity)
-#         create_entity_node(entity_name=entity, vector=entityVector, datetime=now)
-#         create_link_document_entity(doc_name=document, entity_name=entity, weight=0.7)
+for document, entity_list in textName_entities.items():
+    create_document_node(document) 
+    now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+    for entity in entity_list:
+        entity = entity.lower()
+        entityVector = sentence2vecModel.get_sentence_vector(entity)
+        create_entity_node(entity_name=entity, vector=entityVector, datetime=now)
+        create_link_document_entity(doc_name=document, entity_name=entity, weight=0.7)
+        for predefined_class, list_of_entities in predefined_classes.items():
+            if entity in list_of_entities:
+                create_link_entity_class(entity_name=entity, most_similar_class_name=predefined_class, most_similar_class_score=0.7)
+            else:
+                continue
+        # Create link between entity and class via cosine similarity
+        most_similar_class_nodes = get_most_similar_class_nodes(entity_name=entity)
+        best_class_node = list(most_similar_class_nodes)[0]
+        best_class_node_score = list(most_similar_class_nodes.values())[0]
+        create_link_entity_class(entity_name=entity, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
+        for class_node, score in most_similar_class_nodes.items():
+            if score > class_threshold:
+                create_link_entity_class(entity_name=entity, most_similar_class_name=class_node, most_similar_class_score=score)
