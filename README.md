@@ -3,6 +3,7 @@
 Goal: To recommend 'Documents' to 'Users'
 
 Step 1: Populate the graph database
+
 Files: addPredefinedClasses.py, addingDocuments.py
 addPredefinedClasses.py:
   - These are predefined class nodes which entities will be linked to
@@ -13,6 +14,7 @@ addingDocuments.py:
   - Links between the extracted keywords and the predefined classes are also formed.
 
 Step 2: Logging and Adding entities to enhance a user profile
+
 Files: loggingToES.py, addingToProfile.py
 Test Case 1
 1. A node of the same name as the entity in question (EIQ) already exists
@@ -54,6 +56,7 @@ Action: create the EIQ first with its corresponding vector embedding and datetim
 Action: form a new LIKES relationship between user and the entity and give its properties (freq, rec, weight) based on logs and link EIQ to the correct classes
 
 Step 3: Recommendation
+
 Files: recommendation.py
   - runs a personalised pagerank algorithm to get the highest ranked document to recommend to user
 
