@@ -62,6 +62,20 @@ class massUpdate:
             SET rel.weight = similarity
             """)
     
+    def update_all_whitelist_similar_relationship_properties(self):
+        with graphDB.session() as session:
+            session.run("""
+            MATCH (node1:Entity)-[rel:IS_SIMILAR_TO]-(node2:Class) 
+            SET rel.weight = 0.7
+            """)
+    
+    def update_all_has_relationship_properties(self):
+        with graphDB.session() as session:
+            session.run("""
+            MATCH (node1:Document)-[rel:HAS]-(node2:Entity) 
+            SET rel.weight = 0.7
+            """)
+
     def reverseDirectionOfAllLinks(self):
         with graphDB.session() as session:
             session.run("""
@@ -97,3 +111,6 @@ class massUpdate:
             else:
                 weight = self.calculate_weight(freq=freq, rec=rec)
                 self.update_all_likes_relationship_properties(freq=freq, id=id, rec=rec, weight=weight)
+            
+        self.update_all_has_relationship_properties()
+        self.update_all_whitelist_similar_relationship_properties()
