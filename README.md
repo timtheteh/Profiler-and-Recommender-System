@@ -63,3 +63,8 @@ Files: recommendation.py
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/759613c9-c60b-4305-a605-c8910c3a4300)
 Result: For user '127.0.0.1', the document recommended to it is 'Document 2'. For user '10.0.0.1', the document recommended to it is 'Document 3'.
 Legend: Blue (entities), Yellow (classes), Pink (Users), Red (Documents)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/9d1315a5-0fbc-43c0-a0e3-3d9919305f38)
+
+Control experiment: weights of all relationships are set to 0 
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c580b874-e3cf-4914-8ab8-7aacebb65b79)
+Recommendations are less meaningful than the case where the edges are weighted.
