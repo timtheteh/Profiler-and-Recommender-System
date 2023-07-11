@@ -20,6 +20,7 @@ addingDocuments.py:
 Step 2: Logging and Adding entities to enhance a user profile
 
 Files: loggingToES.py, addingToProfile.py
+
 Test Case 1
 1. A node of the same name as the entity in question (EIQ) already exists
 2. There is an existing LIKES relationship between this node and the user
