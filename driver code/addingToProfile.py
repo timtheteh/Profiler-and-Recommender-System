@@ -85,7 +85,7 @@ def get_new_documents_user_inputs(timestamp):
                     {
                         "range": {
                             "datetime": {
-                                "gte": timestamp
+                                "gt": timestamp
                             }
                         }
                     }
@@ -468,6 +468,7 @@ def get_most_similar_class_nodes(entity_name):
 # and give its properties (freq, rec, weight) based on logs
 # and link EIQ to the correct classes
 def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, dateaddedorupdated):
+    entity_name = entity_name.lower()
     if check_existence_entity(entity_name): 
         ### Test Case 1 ###
         update_entity_datetimeadded(entity_name=entity_name, datetimeadded=dateaddedorupdated)
@@ -492,7 +493,7 @@ def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, 
                 create_link_user_entity(user_name=user_name, entity_name=entity_name, freq=freq, rec=rec, weight=weight)
                 # Create link between entity and class via predefined relationships if entity is in the predefined list
                 for predefined_class, list_of_entities in predefined_classes.items():
-                    if entity_name.lower() in list_of_entities:
+                    if entity_name in list_of_entities:
                         create_link_entity_class(entity_name=entity_name, most_similar_class_name=predefined_class, most_similar_class_score=0.7)
                     else:
                         continue
@@ -548,7 +549,8 @@ print("User queries: ", user_queries)
 # if there are user_queries, 
 # 1. extract entities from each query
 # 2. add the entities into graph with the name, datetimeadded and vector
-# 3. 
+# 3. add the relationships (user-entity, entity-class) with the properties: freq, rec, weight
+# 4. update all the relationships weights based on current time
 if user_queries:
     entities = {}
     for query in user_queries.keys():
@@ -561,7 +563,7 @@ if user_queries:
         time_delta = now - datetime_object
         rec = (time_delta.total_seconds())/(24*60*60) 
 
-        # Get more specific entities from query using whitelist
+        # Get specific entities from query using whitelist
         query = query.lower()
         entities_from_answer = []
         for phrase in whitelist:
@@ -640,8 +642,3 @@ else:
 # # after adding entities, do one run of mass update of relationships
 x = massUpdateLikesWeights.massUpdate()
 x.massUpdateGraphLikesRelationships()
-
-
-
-
-
