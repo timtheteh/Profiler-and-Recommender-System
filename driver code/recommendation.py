@@ -3,7 +3,7 @@ import neo4j
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
 graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_username}", f"{dbms_password}"), encrypted=False)
-user_name = "10.0.0.1"
+user_name = "127.0.0.1"
 graph_name = "test"
 testEntitiesToReduce = ["population", "Malaysia", "South-East Asia"]
 testEntitiesToBoost = ["Singapore", "World Conflicts"]
@@ -55,6 +55,21 @@ def getUserInterestsAsSourceNodes(user_name):
             list_ids.append(record['id(ent)'])
         return list_ids
 
+def getDocumentEntities(doc_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (user:Document {name: $doc_name})
+        MATCH (user)-[r1:HAS]-(ent:Entity)
+        RETURN ent.name
+        """, parameters={
+            "doc_name": doc_name
+        })
+        records = result.data()
+        list_ids = []
+        for record in records:
+            list_ids.append(record['ent.name'])
+        return list_ids
+
 def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecommend):
     with graphDB.session() as session:
         result = session.run(           
@@ -85,7 +100,8 @@ def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecom
         print('the scores sum to: ', total_score, '\n')
         print('number of relevant results: ', len(relevant_records), '\n')
         print('relevant results: ', relevant_records, '\n')
-        print('recommendations are: ', recommendations)
+        print('recommendations are: ', recommendations, '\n')
+        return recommendations[list(recommendations.keys())[0]][0]
 
 def testWeights(user_name, testEntitiesToReduce, testEntitiesToBoost):
     for ent in testEntitiesToReduce:
@@ -149,4 +165,6 @@ def deleteAllExistingGraphs():
 createPageRankGraph(graphName=graph_name)
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
-personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
+recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
+documentEntities = getDocumentEntities(recommendedDocument)
+print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".")
