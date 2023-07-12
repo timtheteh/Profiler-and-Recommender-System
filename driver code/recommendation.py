@@ -250,4 +250,4 @@ else:
         otherUsersEmbeddingSimilarityScores[id] = abs(cos_sim)
     bestUserId = max(otherUsersEmbeddingSimilarityScores)
     bestUser = getUserNameFromId(bestUserId)
-    print("This profile seems the most similar to your profile: ", bestUser)
+    print("The profile that seems the most similar to your profile is: ", bestUser)
