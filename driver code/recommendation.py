@@ -1,4 +1,6 @@
 import neo4j
+from numpy import dot
+from numpy.linalg import norm
 
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -164,13 +166,88 @@ def deleteAllExistingGraphs():
         for graphName in existingGraphs:
             session.run('CALL gds.graph.drop($graphName)',graphName=graphName)
 
-# testWeights(user_name=user_name, testEntitiesToReduce=testEntitiesToReduce, testEntitiesToBoost=testEntitiesToBoost)
+def assignGraphEmbeddings(graphName):
+    with graphDB.session() as session:
+        result = session.run("""
+        CALL gds.fastRP.stream(
+            $graphName,
+            {
+                embeddingDimension: 4,
+                randomSeed: 42,
+                relationshipWeightProperty: 'weight'
+            }
+        )
+        YIELD nodeId, embedding
+        RETURN nodeId, embedding
+        """, graphName=graphName)
+        records = result.data()
+        return records
+
+def getUserEmbedding(user_name, graphEmbeddings):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (user:User {name: $user_name})
+        RETURN id(user)
+        """, parameters={
+            "user_name": user_name
+        })
+        record = result.single()
+        user_id = record['id(user)']
+        user_embedding = None
+        for node in graphEmbeddings:
+            if node['nodeId'] == user_id:
+                user_embedding = node['embedding']
+        return user_embedding
+
+def getOtherUsersIds(user_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (user1:User {name: $user_name}),(user2:User)
+        WHERE user1 <> user2
+        RETURN id(user2)
+        """, parameters={
+            "user_name": user_name,
+        })
+        records = result.data()
+        return records
+
+def getUserNameFromId(user_id):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (u:User)
+        WHERE id(u) = $user_id
+        RETURN u.name
+        """, user_id=user_id)
+        record = result.single()
+        return record['u.name']
+
+### Pagerank algorithm ###
 createPageRankGraph(graphName=graph_name)
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
 recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
 if recommendedDocument:
     documentEntities = getDocumentEntities(recommendedDocument)
-    print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".")
+    print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".\n")
 else:
-    print("Sorry, it seems like none of the documents in the database are suitable to be recommeneded to you.")
+    print("Sorry, it seems like none of the documents in the database are suitable to be recommeneded to you.\n")
+
+### Recommend similar users ###
+graphEmbeddings = assignGraphEmbeddings(graphName=graph_name)
+user_embedding = getUserEmbedding(user_name=user_name, graphEmbeddings=graphEmbeddings)
+otherUsersIds = getOtherUsersIds(user_name=user_name)
+if len(otherUsersIds) == 0:
+    print("No other users to recommend!")
+else:
+    otherUsersEmbeddings = {}
+    for i in otherUsersIds:
+        otherUserId = i['id(user2)']
+        otherUserEmbedding = graphEmbeddings[otherUserId]['embedding']
+        otherUsersEmbeddings[otherUserId] = otherUserEmbedding
+    otherUsersEmbeddingSimilarityScores = {}
+    for id, embedding in otherUsersEmbeddings.items():
+        cos_sim = dot(user_embedding, embedding)/(norm(user_embedding)*norm(embedding))
+        otherUsersEmbeddingSimilarityScores[id] = abs(cos_sim)
+    bestUserId = max(otherUsersEmbeddingSimilarityScores)
+    bestUser = getUserNameFromId(bestUserId)
+    print("This profile seems the most similar to your profile: ", bestUser)
