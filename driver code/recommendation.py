@@ -101,7 +101,10 @@ def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecom
         print('number of relevant results: ', len(relevant_records), '\n')
         print('relevant results: ', relevant_records, '\n')
         print('recommendations are: ', recommendations, '\n')
-        return recommendations[list(recommendations.keys())[0]][0]
+        if recommendations[list(recommendations.keys())[0]][1] != 0.0:
+            return recommendations[list(recommendations.keys())[0]][0]
+        else:
+            return None
 
 def testWeights(user_name, testEntitiesToReduce, testEntitiesToBoost):
     for ent in testEntitiesToReduce:
@@ -166,5 +169,8 @@ createPageRankGraph(graphName=graph_name)
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
 recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
-documentEntities = getDocumentEntities(recommendedDocument)
-print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".")
+if recommendedDocument:
+    documentEntities = getDocumentEntities(recommendedDocument)
+    print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".")
+else:
+    print("Sorry, it seems like none of the documents in the database are suitable to be recommeneded to you.")
