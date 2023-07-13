@@ -87,6 +87,7 @@ Recommendations are less meaningful than the case where the edges are weighted.
 2. Unweighted case (weight = 0)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8f92be35-0474-4bde-92dd-ae201045fce6)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/131a6adc-9ad8-42da-bc2a-1ad8e67b47f0)
+
 No documents are recommended as the pagerank scores for each document node is 0.0.
 
 No users are recommended because the embeddings of each other user node is 0.0.
@@ -95,4 +96,5 @@ No users are recommended because the embeddings of each other user node is 0.0.
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bddf5ce6-5137-44b3-a136-61a56dd47863)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/82c4e2a9-ac1c-4ff2-bf15-9f4c5bcfada2)
 
+Although the document recommended is the same as the weighted case, its pagerank score is lower.
 
