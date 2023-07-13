@@ -89,5 +89,16 @@ No users are recommended because the embeddings of each other user node is 0.0.
 Although the document recommended is the same as the weighted case, its pagerank score is lower.
 
 ### Classes vs No Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/db4d360a-0c30-4ce4-a851-da7e1c141403)
 
 1. No Classes (Weighted)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b318c777-0abc-4740-a55e-74a5e3492a92)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/00495747-3cff-41fb-adea-4043ee39c7ec)
+
+2. No Classes (Weight = 1)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2971492d-c0e9-46e7-bebc-be5cd28c34bd)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4a1bffca-ec99-43ea-ab1b-533b9a9570b7)
+
+
+
+
