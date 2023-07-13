@@ -146,6 +146,12 @@ However, it did result in slightly different pagerank scores. Weighted relations
 
 1. Number of documents = 100; Classes; Weighted; More connections
 
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/28b20e52-3164-495c-8215-105134e20262)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d0c32b3c-d3d2-4cf7-b3de-d817f619f967)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/52b975a2-9916-4cc2-90c8-9babdfa5a65f)
 
 2. Number of documents = 100; No Classes; All same weight; More connections
 
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c46154e6-787a-41fe-adf1-6fe122783f4b)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/473082bf-2963-4579-b184-db949ab40f2e)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/3be5d3e4-f5fe-4c54-8bd2-cbb9db79b6a4)
