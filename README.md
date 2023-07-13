@@ -132,3 +132,9 @@ Although the document recommended is the same as the weighted case, its pagerank
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/701a0f5c-8fd5-4625-9282-49171f1301ef)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/064ca22d-2ce9-42f0-af42-98c6c39f843e)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/6b86847c-dc7f-4a4e-90bc-bbef6f46e5d1)
+
+### Conclusion:
+In the experiments above, the presence of classes don't affect the result of the document recommended to the user. 
+
+However, it affects the pageranks scores. Classes do increase the confidence of the document that is recommended to the user, as the score is higher in the case where there are classes vs the case where there aren't. This might be more crucial when the graph becomes more convoluted, when the user likes more entities that are in common with other documents and so on.
+
