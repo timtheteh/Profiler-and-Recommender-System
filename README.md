@@ -99,6 +99,25 @@ Although the document recommended is the same as the weighted case, its pagerank
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2971492d-c0e9-46e7-bebc-be5cd28c34bd)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4a1bffca-ec99-43ea-ab1b-533b9a9570b7)
 
+### Size of graph
+
+1. Number of documents = 100; Classes; Weighted
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/578ddc2f-adb6-419f-8571-7cd211856cba)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74441f6e-af47-42d7-828e-b26bbe1b6e06)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74a90207-57c8-42a9-bbb1-81d78bed8038)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/fdb084cb-81f9-4441-96f1-592a84e89b2a)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d0ecea8e-32d6-47da-a821-369fe2867082)
+
+3. Number of documents = 100; No Classes; Weighted
+
+4. Number of document = 100; Classes; Weight = 1
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/40e0f259-1f5a-4dc6-bd32-28f11246b661)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/97dd3d51-d060-41c1-b6c0-18d32405903e)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/0f911f51-037c-4883-892a-17ff67a6e654)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bff59b03-bcb0-40e9-bae6-fb9f3ebd4a44)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/587760d2-d51f-452d-ac5c-ebf51c1162e0)
+
+5. Number of document = 100; No Classes; Weight = 1
 
 
 
