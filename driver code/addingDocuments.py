@@ -142,13 +142,19 @@ def create_link_entity_class(entity_name, most_similar_class_name, most_similar_
         })
 
 list_vicuna_answers = []
-for i in range(5):
-    random_keywords = get_random_keywords(5)
-    print("random keywords are here: ", random_keywords)
-    prompt = createPrompt(random_keywords)
-    vicuna_answer = getVicunaAnswer(prompt_template=prompt, temperature=0)
-    json_answer = json.loads(vicuna_answer)
-    list_vicuna_answers.append(json_answer['text'])
+for i in range(100):
+    try:
+        random_keywords = get_random_keywords(5)
+        print("random keywords are here: ", random_keywords)
+        prompt = createPrompt(random_keywords)
+        vicuna_answer = getVicunaAnswer(prompt_template=prompt, temperature=0)
+        print(vicuna_answer)
+        json_answer = json.loads(vicuna_answer)
+        print(json_answer)
+        list_vicuna_answers.append(json_answer['text'])
+    except ValueError:  # includes simplejson.decoder.JSONDecodeError
+        print('Decoding JSON has failed')
+        continue
 
 print("list of vicuna answers: ", list_vicuna_answers, '\n')
 
@@ -207,9 +213,6 @@ for document, entity_list in textName_entities.items():
                 continue
         # Create link between entity and class via cosine similarity
         most_similar_class_nodes = get_most_similar_class_nodes(entity_name=entity)
-        best_class_node = list(most_similar_class_nodes)[0]
-        best_class_node_score = list(most_similar_class_nodes.values())[0]
-        create_link_entity_class(entity_name=entity, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
         for class_node, score in most_similar_class_nodes.items():
             if score > class_threshold:
                 create_link_entity_class(entity_name=entity, most_similar_class_name=class_node, most_similar_class_score=score)
