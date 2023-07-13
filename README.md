@@ -78,4 +78,8 @@ Recommendations are less meaningful than the case where the edges are weighted.
 # Evaluation of Results
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 
-### hi
+### Weighted vs Unweighted vs All same weight
+
+1. Weighted case
+
+
