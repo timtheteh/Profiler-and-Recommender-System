@@ -29,7 +29,7 @@ threshold_for_similarity = 0.65
 # Parameter 3 (for weights of LIKES relationship): change this to have gradual/drastic changes in probability of weights
 probability_rate = 0.5
 # Parameter 4 (to see if entity in question is similar to any class nodes) change this to have node point to more classes
-class_threshold = 0.35
+class_threshold = 0.6
 # Parameter 5: after this number of days, frequency of query is no longer relevant and consequently, wieght of LIKES relationship is zero.
 num_days_before_freq_reset = 10
 
