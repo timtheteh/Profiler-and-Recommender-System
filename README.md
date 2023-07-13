@@ -65,20 +65,10 @@ Step 3: Recommendation
 Files: recommendation.py
   - runs a personalised pagerank algorithm to get the highest ranked document to recommend to user
 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/759613c9-c60b-4305-a605-c8910c3a4300)
-Result: For user '127.0.0.1', the document recommended to it is 'Document 2'. For user '10.0.0.1', the document recommended to it is 'Document 3'.
-Legend: Blue (entities), Yellow (classes), Pink (Users), Red (Documents)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/75cf7d7a-e4ef-4b06-b272-1191574c0652)
-
-Control experiment: weights of all relationships are set to 0 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/23f5f14a-6ffa-4aac-ae06-a99069d98f2e)
-Recommendations are less meaningful than the case where the edges are weighted.
-
-
 # Evaluation of Results
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 
 ### Weighted vs Unweighted vs All same weight
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 
 1. Weighted case
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
@@ -98,3 +88,6 @@ No users are recommended because the embeddings of each other user node is 0.0.
 
 Although the document recommended is the same as the weighted case, its pagerank score is lower.
 
+### Classes vs No Classes
+
+1. No Classes (Weighted)
