@@ -73,3 +73,9 @@ Legend: Blue (entities), Yellow (classes), Pink (Users), Red (Documents)
 Control experiment: weights of all relationships are set to 0 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/23f5f14a-6ffa-4aac-ae06-a99069d98f2e)
 Recommendations are less meaningful than the case where the edges are weighted.
+
+
+# Evaluation of Results
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
+
+### hi
