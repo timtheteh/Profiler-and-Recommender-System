@@ -66,7 +66,7 @@ class massUpdate:
         with graphDB.session() as session:
             session.run("""
             MATCH (node1:Entity)-[rel:IS_SIMILAR_TO]-(node2:Class) 
-            WHERE n.name STARTS WITH 'Category'
+            WHERE node2.name STARTS WITH 'Category'
             SET rel.weight = 0.7
             """)
     
