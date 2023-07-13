@@ -1,6 +1,7 @@
 import neo4j
 from numpy import dot
 from numpy.linalg import norm
+import time
 
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -222,10 +223,17 @@ def getUserNameFromId(user_id):
         return record['u.name']
 
 ### Pagerank algorithm ###
+start_time = time.time()
 createPageRankGraph(graphName=graph_name)
+timeToRunFunction = time.time() - start_time
+print("The time taken to project the graph from the database is: ", str(timeToRunFunction), '\n')
+
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
+start_time = time.time()
 recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
+timeToRunFunction = time.time() - start_time
+print("hi")
 if recommendedDocument:
     documentEntities = getDocumentEntities(recommendedDocument)
     print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".\n")
