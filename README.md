@@ -102,6 +102,7 @@ Although the document recommended is the same as the weighted case, its pagerank
 ### Size of graph
 
 1. Number of documents = 100; Classes; Weighted
+
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/578ddc2f-adb6-419f-8571-7cd211856cba)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74441f6e-af47-42d7-828e-b26bbe1b6e06)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74a90207-57c8-42a9-bbb1-81d78bed8038)
@@ -111,6 +112,7 @@ Although the document recommended is the same as the weighted case, its pagerank
 2. Number of documents = 100; No Classes; Weighted
 
 3. Number of document = 100; Classes; Weight = 1
+
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/40e0f259-1f5a-4dc6-bd32-28f11246b661)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/97dd3d51-d060-41c1-b6c0-18d32405903e)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/0f911f51-037c-4883-892a-17ff67a6e654)
