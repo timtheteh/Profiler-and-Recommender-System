@@ -141,3 +141,11 @@ However, it affects the pagerank scores. Classes do increase the confidence of t
 This is also evident where we compare weighted vs same weights. In the experiments above, the presence of weighted links did not necessarily change the outcome of the recommended document. 
 
 However, it did result in slightly different pagerank scores. Weighted relationships do increase the confidence of the document that is recommended to the user. Again, the significance of this difference might only be more apparent when the graph becomes more convoluted. 
+
+### Real Life Case
+
+1. Number of documents = 100; Classes; Weighted; More connections
+
+
+2. Number of documents = 100; No Classes; All same weight; More connections
+
