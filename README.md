@@ -111,6 +111,12 @@ Although the document recommended is the same as the weighted case, its pagerank
 
 2. Number of documents = 100; No Classes; Weighted
 
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/06e81502-64f7-4772-b48e-898b24d67056)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/ff3a7737-35dd-45e9-b850-1c0c9d1cc0d7)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/67aacd1d-2eac-480e-86f8-f06e1585954a)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/86af40b9-47d4-42ea-8e7c-270372a0f5a8)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/898d247e-22bd-4a72-946d-a8f63b5b4bdb)
+
 3. Number of document = 100; Classes; Weight = 1
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/40e0f259-1f5a-4dc6-bd32-28f11246b661)
@@ -121,5 +127,8 @@ Although the document recommended is the same as the weighted case, its pagerank
 
 4. Number of document = 100; No Classes; Weight = 1
 
-
-
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/af490b70-685e-49e8-a010-f7ef85e1c4e8)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b7d5b758-211a-41e6-b56b-a930428d39f4)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/701a0f5c-8fd5-4625-9282-49171f1301ef)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/064ca22d-2ce9-42f0-af42-98c6c39f843e)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/6b86847c-dc7f-4a4e-90bc-bbef6f46e5d1)
