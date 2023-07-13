@@ -222,18 +222,26 @@ def getUserNameFromId(user_id):
         record = result.single()
         return record['u.name']
 
+def massUpdateAllRelationshipsToZero():
+    with graphDB.session() as session:
+        session.run("""
+            MATCH (s)-[r]-(t) 
+            SET r.weight = $weight
+            """, parameters = {
+                "weight": 100
+            })
+
+massUpdateAllRelationshipsToZero()
 ### Pagerank algorithm ###
 start_time = time.time()
 createPageRankGraph(graphName=graph_name)
-timeToRunFunction = time.time() - start_time
-print("The time taken to project the graph from the database is: ", str(timeToRunFunction), '\n')
+timeToProjectGraph = time.time() - start_time
 
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
 start_time = time.time()
 recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
-timeToRunFunction = time.time() - start_time
-print("hi")
+timeToRecommendDocument = time.time() - start_time
 if recommendedDocument:
     documentEntities = getDocumentEntities(recommendedDocument)
     print("Based on your interests, you might be interested in this document: ", recommendedDocument, ". It contains the following entities which might be of interest to you: ", documentEntities, ".\n")
@@ -241,21 +249,42 @@ else:
     print("Sorry, it seems like none of the documents in the database are suitable to be recommeneded to you.\n")
 
 ### Recommend similar users ###
+start_time = time.time()
 graphEmbeddings = assignGraphEmbeddings(graphName=graph_name)
+timeToAssignEmbeddings = time.time() - start_time
 user_embedding = getUserEmbedding(user_name=user_name, graphEmbeddings=graphEmbeddings)
 otherUsersIds = getOtherUsersIds(user_name=user_name)
 if len(otherUsersIds) == 0:
     print("No other users to recommend!")
 else:
+    start_time = time.time()
     otherUsersEmbeddings = {}
     for i in otherUsersIds:
         otherUserId = i['id(user2)']
-        otherUserEmbedding = graphEmbeddings[otherUserId]['embedding']
-        otherUsersEmbeddings[otherUserId] = otherUserEmbedding
+        for j in graphEmbeddings:
+            if j['nodeId'] == otherUserId:
+                otherUserEmbedding = j['embedding']
+        if not all(v == 0 for v in otherUserEmbedding):
+            otherUsersEmbeddings[otherUserId] = otherUserEmbedding
     otherUsersEmbeddingSimilarityScores = {}
     for id, embedding in otherUsersEmbeddings.items():
         cos_sim = dot(user_embedding, embedding)/(norm(user_embedding)*norm(embedding))
         otherUsersEmbeddingSimilarityScores[id] = abs(cos_sim)
-    bestUserId = max(otherUsersEmbeddingSimilarityScores)
-    bestUser = getUserNameFromId(bestUserId)
-    print("The profile that seems the most similar to your profile is: ", bestUser)
+    if len(otherUsersEmbeddings) != 0:
+        bestUserId = max(otherUsersEmbeddingSimilarityScores)
+        bestUser = getUserNameFromId(bestUserId)
+        print("The profile that seems the most similar to your profile is: ", bestUser, '\n')
+    else:
+        print("Sorry, it seems that there are no users that are similar to you.")
+    timeToRecommendUser = time.time() - start_time
+    
+
+print("""
+      Stats: 
+      Time to project graph: %s
+      Time to recommend graph: %s
+      Time to assign embeddings to graph: %s
+      Time to recommend another user: %s
+      """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser))
+
+
