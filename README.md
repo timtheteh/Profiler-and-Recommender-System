@@ -168,7 +168,7 @@ CASE 1 & CASE 2:
 - Change the default weight of the IS_SIMILAR_TO and HAS relationships from 0.7 to a range (eg. 0.3 - 0.9)
 - Use smaller number of documents for easier analysis
 - Compare this case to the case where all relationships are 1 and there are no classes.
-- User '127.0.0.1' (likes mainly 'locations'):
+- User '127.0.0.1' ():
     - Likes document 8 alot: [fp 2 times, truck bomb 10 times, bomb 10 times, mo 10 times]
     - Likes as many entities in document 9 as in document 8, but the weights are different: [email 1 time, gmlrs 1 time, sle 1 time, pandan river 1 time]
     - Likes document 14 decently: [surveillance 2 times, csf 2 times]
@@ -176,17 +176,11 @@ CASE 1 & CASE 2:
     - Likes document 17 minimally: [msc 1 time]
     - Likes document 4 minimally: [microwave 1 time]
 
-HIIIIII
-- User '10.0.0.1' -> also likes 'locations':
-    - Likes [jurong east 2 times, changi 4 times, changi air base 3 times]
-- User '11.0.0.1' -> instead likes 'Category 4'
-    - Likes [heli 2 times, gsmb 3 times, icbm 4 times]
-
 1. Documents = 20, Weighted, Classes (Base Case)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63e248d5-24a4-4ca6-9b8d-d9cd97e9377f)
 
-
-2. Documents = 20, All weights = 1, Classes
-
+2. Documents = 20, All weights = 100, Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2a300d48-afe4-4337-bba1-3e8a1fef498f)
 
 CASE 3 & CASE 4:
 - User '127.0.0.1' (likes mainly 'locations'):
