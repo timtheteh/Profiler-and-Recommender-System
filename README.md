@@ -193,22 +193,20 @@ Here, we choose the top 5 interest nodes as the source nodes (based on the weigh
 
 ### Better experiment Part 2 (Testing of Classes)
 
+Purpose of classes: to form more possible connections to documents that can be recommended (the ranking of documents is more meaningful)
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
+
 CASE 3 & CASE 4:
-- User '127.0.0.1' (likes mainly 'locations'):
-    - Likes document 7 alot: [yishun 2 times, sembawang 8 times, mandai 6 times, yishun pond 10 times]
-    - Likes as many entities in document 1 as in document 7, but the weights are different: [jurong 1 time, jurong island 1 time, evac 1 time, stagmont road 1 time]
-    - Likes document 6 decently: [seletar 2 times, airbase 2 times]
-    - Likes document 8 decently: [psydef 2 times, ids 2 times]
-    - Likes document 10 minimally: [weaponization 1 time]
-    - Likes document 3 minimally: [heli 1 time]
-- User '10.0.0.1' -> also likes 'locations':
-    - Likes [jurong east 2 times, changi 4 times, changi air base 3 times]
-- User '11.0.0.1' -> instead likes 'Category 4'
-    - Likes [heli 2 times, gsmb 3 times, icbm 4 times]
+- Documents which have more 'locations' entities:
+  - document 3, 14, 7, 2, 4, 1
+- User '127.0.0.1' (likes mainly 'locations'): [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2]
 
-3. Documents = 20, Weighted, No Classes
+3. Documents = 20, Weighted, Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a5c2f2c2-d79d-44f6-9a0d-ead92aa444e6)
 
-4. Documents = 20, All Weights = 1, No Classes
+4. Documents = 20, Weighted, No Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
 
 
 CASE 5 & CASE 6:
