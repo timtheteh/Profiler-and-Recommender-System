@@ -57,6 +57,37 @@ To improve the results of the personalised pagerank algorithm, the graph databas
   - For now, each node in the graph will have a node embedding calculated for it using the inbuilt fastRP algorithm in Neo4j.
   - Nodes with 'User' label apart from the user in question will be recommended as the most similar users to be recommended (similar interests).
 
+# Testing and Results
+
+### Do weights improve the document recommendation?
+
+**CASE 1 & CASE 2:**
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/55b6ade1-6493-4aab-8b48-811bc3c77eb3)
+
+- User '127.0.0.1':
+    - Likes document 5 alot: [wave 10 times, airbase 10 times, tengah airbase 10 times, mob plan 5 times]
+    - Likes as many entities in document 19 as in document 5, but the weights are different: [pulau 1 time, rand 1 time, stockpile 1 time, tekong 1 time]
+    - Likes as many entities in document 3 as in document 5, but the weights are different: [hartford 1 time, fuel 1 time, fcu 1 time, petrol 1 time]
+    - Likes as many entities in document 20 as in document 5, but the weights are different: [network 1 time, sf 1 time, network ids 1 time, ids 1 time]
+    - Likes document 2 decently: [reserve 2 times, helicon 2 times]
+    - Likes document 10 decently: [satcom 2 times, gstb 2 times]
+    - Likes document 13 minimally: [executive 1 time]
+
+1. Documents = 20, Weighted, Classes (Base Case)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bc55e348-a5e1-4982-a10c-3dae65ee74e6)
+
+2. Documents = 20, All weights = 100, Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/524554a1-b213-4fde-a891-e3edc16dd59b)
+
+### Analysis
+
+The weighted case (Case 1) shows the correct document (Document 5) as the document to be recommended, which reaffirms that weighted links do help with the personalised recommendation.
+
+In the unweighted case (Case 2) where the weights of each relationship is set the same at 100, the document it recommended is Document 20. The reason for this wrong recommendation is because in an unweighted case, the source nodes have little bias to the user as they are chosen at random (since all links are equal), leaving almost equal probability to pick any of the 4 documents (which have the most outgoing links from the pov of the user) as the best document to recommend. In this case, among Document 5, 19, 3 and 20, the document with the highest pagerank score was Document 20, which is the incorrect recommendation.
+
+
+
 # Initial Experiments
 
 ### Weighted vs Unweighted vs All same weight
@@ -160,28 +191,7 @@ One reason why the pagerank recommendations remain the same whether weighted or 
 - Use smaller number of documents for easier analysis
 - Compare this case to the case where all relationships are 1 and there are no classes.
 
-**CASE 1 & CASE 2:**
 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/55b6ade1-6493-4aab-8b48-811bc3c77eb3)
-
-- User '127.0.0.1':
-    - Likes document 5 alot: [wave 10 times, airbase 10 times, tengah airbase 10 times, mob plan 5 times]
-    - Likes as many entities in document 19 as in document 5, but the weights are different: [pulau 1 time, rand 1 time, stockpile 1 time, tekong 1 time]
-    - Likes as many entities in document 3 as in document 5, but the weights are different: [hartford 1 time, fuel 1 time, fcu 1 time, petrol 1 time]
-    - Likes as many entities in document 20 as in document 5, but the weights are different: [network 1 time, sf 1 time, network ids 1 time, ids 1 time]
-    - Likes document 2 decently: [reserve 2 times, helicon 2 times]
-    - Likes document 10 decently: [satcom 2 times, gstb 2 times]
-    - Likes document 13 minimally: [executive 1 time]
-
-1. Documents = 20, Weighted, Classes (Base Case)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bc55e348-a5e1-4982-a10c-3dae65ee74e6)
-
-2. Documents = 20, All weights = 100, Classes
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/524554a1-b213-4fde-a891-e3edc16dd59b)
-
-### Analysis
-
-Here, we choose the top 5 interest nodes as the source nodes (based on the weight of the LIKES relationships) as the basis for the personalised pagerank. The recommendation when it is weighted is hence more meaningful than when all the weights are equal.
 
 # Better experiment Part 2 (Testing of Classes)
 
