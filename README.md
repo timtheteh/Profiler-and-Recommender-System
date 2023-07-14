@@ -205,8 +205,14 @@ CASE 3 & CASE 4:
 3. Documents = 20, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a5c2f2c2-d79d-44f6-9a0d-ead92aa444e6)
 
+**ORDER:**
+**SAME:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
+
 4. Documents = 20, Weighted, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
+
+**ORDER:**
+**Same:** 3, 19 **Different:** 13, 6, 9, 4, 14, 10, 2, 12, 16, 18, 1, 20, 11. Zeros: 15, 17, 5, 7, 8
 
 ### Analysis
 
