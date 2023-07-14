@@ -142,7 +142,7 @@ def create_link_entity_class(entity_name, most_similar_class_name, most_similar_
         })
 
 list_vicuna_answers = []
-for i in range(100):
+for i in range(20):
     try:
         random_keywords = get_random_keywords(5)
         print("random keywords are here: ", random_keywords)
@@ -205,10 +205,10 @@ for document, entity_list in textName_entities.items():
         entity = entity.lower()
         entityVector = sentence2vecModel.get_sentence_vector(entity)
         create_entity_node(entity_name=entity, vector=entityVector, datetime=now)
-        create_link_document_entity(doc_name=document, entity_name=entity, weight=0.7)
+        create_link_document_entity(doc_name=document, entity_name=entity, weight=random.uniform(0.3, 0.9))
         for predefined_class, list_of_entities in predefined_classes.items():
             if entity in list_of_entities:
-                create_link_entity_class(entity_name=entity, most_similar_class_name=predefined_class, most_similar_class_score=0.7)
+                create_link_entity_class(entity_name=entity, most_similar_class_name=predefined_class, most_similar_class_score=random.uniform(0.3, 0.9))
             else:
                 continue
         # Create link between entity and class via cosine similarity
