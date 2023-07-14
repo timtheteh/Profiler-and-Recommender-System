@@ -113,5 +113,5 @@ class massUpdate:
                 weight = self.calculate_weight(freq=freq, rec=rec)
                 self.update_all_likes_relationship_properties(freq=freq, id=id, rec=rec, weight=weight)
             
-        self.update_all_has_relationship_properties()
-        self.update_all_whitelist_similar_relationship_properties()
+        # self.update_all_has_relationship_properties()
+        # self.update_all_whitelist_similar_relationship_properties()
