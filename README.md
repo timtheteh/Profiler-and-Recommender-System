@@ -164,6 +164,7 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 ### Size of graph
 
 **CASE 1:** Number of Documents = 5; Classes; Weighted
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
 
