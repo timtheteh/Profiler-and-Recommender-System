@@ -208,6 +208,9 @@ CASE 3 & CASE 4:
 4. Documents = 20, Weighted, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
 
+### Analysis
+
+As can be seen, there is indeed a difference in the ranking of the pageranks, this will matter when we select the top k documents to show to the user. The classes help to ensure that the the order of the documents is more meaningful.
 
 CASE 5 & CASE 6:
 - User '127.0.0.1' (likes mainly 'locations'):
