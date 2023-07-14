@@ -2,6 +2,7 @@ import neo4j
 from numpy import dot
 from numpy.linalg import norm
 import time
+from heapq import nlargest
 
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -48,15 +49,18 @@ def getUserInterestsAsSourceNodes(user_name):
         result = session.run("""
         MATCH (user:User {name: $user_name})
         MATCH (user)-[r1:LIKES]-(ent:Entity)
-        RETURN id(ent)
+        RETURN id(ent), r1.weight
         """, parameters={
             "user_name": user_name
         })
         records = result.data()
-        list_ids = []
+        id_weights = {}
         for record in records:
-            list_ids.append(record['id(ent)'])
-        return list_ids
+            id_weights[record['id(ent)']] = record['r1.weight']
+        print("id weights are here: ", id_weights)
+        top_ids = nlargest(5, id_weights, key=id_weights.get)
+        print("top_ids are here: ", top_ids)
+        return top_ids
 
 def getDocumentEntities(doc_name):
     with graphDB.session() as session:
@@ -231,7 +235,7 @@ def massUpdateAllRelationshipsToZero():
                 "weight": 100
             })
 
-massUpdateAllRelationshipsToZero()
+# massUpdateAllRelationshipsToZero()
 ### Pagerank algorithm ###
 start_time = time.time()
 createPageRankGraph(graphName=graph_name)
@@ -254,6 +258,7 @@ graphEmbeddings = assignGraphEmbeddings(graphName=graph_name)
 timeToAssignEmbeddings = time.time() - start_time
 user_embedding = getUserEmbedding(user_name=user_name, graphEmbeddings=graphEmbeddings)
 otherUsersIds = getOtherUsersIds(user_name=user_name)
+timeToRecommendUser = 0
 if len(otherUsersIds) == 0:
     print("No other users to recommend!")
 else:
@@ -274,10 +279,9 @@ else:
         bestUserId = max(otherUsersEmbeddingSimilarityScores)
         bestUser = getUserNameFromId(bestUserId)
         print("The profile that seems the most similar to your profile is: ", bestUser, '\n')
+        timeToRecommendUser = time.time() - start_time
     else:
         print("Sorry, it seems that there are no users that are similar to you.")
-    timeToRecommendUser = time.time() - start_time
-    
 
 print("""
       Stats: 
@@ -286,5 +290,3 @@ print("""
       Time to assign embeddings to graph: %s
       Time to recommend another user: %s
       """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser))
-
-
