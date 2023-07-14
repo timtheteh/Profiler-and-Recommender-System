@@ -160,6 +160,7 @@ One reason why the pagerank recommendations remain the same whether weighted or 
 
 ### Better experiment
 
+CASE 1 & CASE 2:
 - Make the user's preference for a certain document to be very obvious than the rest
 - But still remain that he likes random entities from random documents
 - The goal is to make the links between the user and the entities of a document very skewed (eg. 0.9) while the rest are low (eg. 0.2)
@@ -167,11 +168,56 @@ One reason why the pagerank recommendations remain the same whether weighted or 
 - Change the default weight of the IS_SIMILAR_TO and HAS relationships from 0.7 to a range (eg. 0.3 - 0.9)
 - Use smaller number of documents for easier analysis
 - Compare this case to the case where all relationships are 1 and there are no classes.
+- User '127.0.0.1' (likes mainly 'locations'):
+    - Likes document 8 alot: [fp 2 times, truck bomb 10 times, bomb 10 times, mo 10 times]
+    - Likes as many entities in document 9 as in document 8, but the weights are different: [email 1 time, gmlrs 1 time, sle 1 time, pandan river 1 time]
+    - Likes document 14 decently: [surveillance 2 times, csf 2 times]
+    - Likes document 13 decently: [intcoc 2 times, spares 2 times]
+    - Likes document 17 minimally: [msc 1 time]
+    - Likes document 4 minimally: [microwave 1 time]
 
-1. Documents = 10, Weighted, Classes (Base Case)
+HIIIIII
+- User '10.0.0.1' -> also likes 'locations':
+    - Likes [jurong east 2 times, changi 4 times, changi air base 3 times]
+- User '11.0.0.1' -> instead likes 'Category 4'
+    - Likes [heli 2 times, gsmb 3 times, icbm 4 times]
 
-2. Documents = 10, Weighted, No Classes
+1. Documents = 20, Weighted, Classes (Base Case)
 
-3. Documents = 10, All weights = 1, Classes
 
-4. Documents = 10, All Weights = 1, No Classes
+2. Documents = 20, All weights = 1, Classes
+
+
+CASE 3 & CASE 4:
+- User '127.0.0.1' (likes mainly 'locations'):
+    - Likes document 7 alot: [yishun 2 times, sembawang 8 times, mandai 6 times, yishun pond 10 times]
+    - Likes as many entities in document 1 as in document 7, but the weights are different: [jurong 1 time, jurong island 1 time, evac 1 time, stagmont road 1 time]
+    - Likes document 6 decently: [seletar 2 times, airbase 2 times]
+    - Likes document 8 decently: [psydef 2 times, ids 2 times]
+    - Likes document 10 minimally: [weaponization 1 time]
+    - Likes document 3 minimally: [heli 1 time]
+- User '10.0.0.1' -> also likes 'locations':
+    - Likes [jurong east 2 times, changi 4 times, changi air base 3 times]
+- User '11.0.0.1' -> instead likes 'Category 4'
+    - Likes [heli 2 times, gsmb 3 times, icbm 4 times]
+
+3. Documents = 20, Weighted, No Classes
+
+4. Documents = 20, All Weights = 1, No Classes
+
+
+CASE 5 & CASE 6:
+- User '127.0.0.1' (likes mainly 'locations'):
+    - Likes document 7 alot: [yishun 2 times, sembawang 8 times, mandai 6 times, yishun pond 10 times]
+    - Likes as many entities in document 1 as in document 7, but the weights are different: [jurong 1 time, jurong island 1 time, evac 1 time, stagmont road 1 time]
+    - Likes document 6 decently: [seletar 2 times, airbase 2 times]
+    - Likes document 8 decently: [psydef 2 times, ids 2 times]
+    - Likes document 10 minimally: [weaponization 1 time]
+    - Likes document 3 minimally: [heli 1 time]
+- User '10.0.0.1' -> also likes 'locations':
+    - Likes [jurong east 2 times, changi 4 times, changi air base 3 times]
+- User '11.0.0.1' -> instead likes 'Category 4'
+    - Likes [heli 2 times, gsmb 3 times, icbm 4 times]
+5. Documents = 20, Weighted, Classes (Base Case)
+
+6. Documents = 20, All weights = 1, No Classes
