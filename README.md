@@ -57,9 +57,9 @@ To improve the results of the personalised pagerank algorithm, the graph databas
   - For now, each node in the graph will have a node embedding calculated for it using the inbuilt fastRP algorithm in Neo4j.
   - Nodes with 'User' label apart from the user in question will be recommended as the most similar users to be recommended (similar interests).
 
-# Testing and Results
+# Testing and Results for Document Recommendations
 
-### Do weights improve the document recommendation?
+### Test 1: Do weights improve the document recommendation?
 
 **CASE 1 & CASE 2:**
 
@@ -74,10 +74,10 @@ To improve the results of the personalised pagerank algorithm, the graph databas
     - Likes document 10 decently: [satcom 2 times, gstb 2 times]
     - Likes document 13 minimally: [executive 1 time]
 
-1. Documents = 20, Weighted, Classes (Base Case)
+**CASE 1:** Documents = 20, Weighted, Classes (Base Case)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bc55e348-a5e1-4982-a10c-3dae65ee74e6)
 
-2. Documents = 20, All weights = 100, Classes
+**CASE 2:** Documents = 20, All weights = 100, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/524554a1-b213-4fde-a891-e3edc16dd59b)
 
 ### Analysis
@@ -86,45 +86,88 @@ The weighted case (Case 1) shows the correct document (Document 5) as the docume
 
 In the unweighted case (Case 2) where the weights of each relationship is set the same at 100, the document it recommended is Document 20. The reason for this wrong recommendation is because in an unweighted case, the source nodes have little bias to the user as they are chosen at random (since all links are equal), leaving almost equal probability to pick any of the 4 documents (which have the most outgoing links from the pov of the user) as the best document to recommend. In this case, among Document 5, 19, 3 and 20, the document with the highest pagerank score was Document 20, which is the incorrect recommendation.
 
+In addition, the weighted case shows an extremely confident answer in its recommendation. The pagerank score of Document 5 far exceeds that of any other document in the list. This shows that a weighted case does help with providing more menaingful recommendations.
 
+### Test 2: How do 'Class' nodes help with the document recommendation?
 
-# Initial Experiments
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
 
-### Weighted vs Unweighted vs All same weight
+**CASE 3 & CASE 4:**
+- Documents which have more 'locations' entities:
+  - Documents 3, 14, 7, 2, 4, 1
+- User '127.0.0.1' (likes mainly 'locations'):
+  - [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2]
+
+**CASE 3:** Documents = 20, Weighted, Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a5c2f2c2-d79d-44f6-9a0d-ead92aa444e6)
+
+**ORDER:**
+
+**SAME:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
+
+**CASE 4:** Documents = 20, Weighted, No Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
+
+**ORDER:**
+
+**Same:** 3, 19 **Different:** 13, 6, 9, 4, 14, 10, 2, 12, 16, 18, 1, 20, 11. **Zeros:** 15, 17, 5, 7, 8
+
+### Analysis
+
+As can be seen, there is indeed a difference in the ranking of the pageranks, this will matter when we select the top N documents to show to the user. 
+
+'Class' nodes help to recommend documents which might not necessarily have the overlapping entities with the user, but are still possibly of interest to the user as they are connected by similar classes. For example, document A may have [helicopter, tank, fighter jet] as its entities which are connected to the 'Class' node 'Military Vehicles', and document B may have overlapping entities with the user such as [transport plane, tonner, ambulance]. Because these entities are also connected to 'Military Vehicles', although the user may not have necessarily searched for 'helicopter', 'tank' or 'fighter jet', Document A can still be recommended to the user, albeit lower in ranking than Document B. 
+
+In the case where there are no 'Class' nodes, potential documents such as Document 7 can be totally excluded in the top N documents to recommend as the pagerank score for such documents can even be 0, which is undesirable.
+
+### Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation? (TO DO)
+
+**CASE 5 & CASE 6:**
+
+**CASE 5:** Documents = 20, Weighted, Classes (Base Case)
+
+**CASE 6:** Documents = 20, All weights = 1, No Classes
+
+### Analysis
+
+# Testing and Results for User Recommendations
+
+### Test 1: Weighted vs Unweighted vs All same weight
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 
-1. Weighted case
+**CASE 1:** Weighted case
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
 
-2. Unweighted case (weight = 0)
+**CASE 2:** Unweighted case (weight = 0)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8f92be35-0474-4bde-92dd-ae201045fce6)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/131a6adc-9ad8-42da-bc2a-1ad8e67b47f0)
 
-No documents are recommended as the pagerank scores for each document node is 0.0.
-
-No users are recommended because the embeddings of each other user node is 0.0.
-
-3. Same weight (weight = 1)
+**CASE 3:** Same weight (weight = 1)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bddf5ce6-5137-44b3-a136-61a56dd47863)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/82c4e2a9-ac1c-4ff2-bf15-9f4c5bcfada2)
 
-Although the document recommended is the same as the weighted case, its pagerank score is lower.
+### Analysis 
+- In the weighted and the same weight case, the correct user (11.0.0.1) is recommended to the user.
+- The result is only incorrect when the weights are all 0.
+- The durations to project graph, assign embeddings to graph and utimately give a user recommendation are all slightly slower in the weighted case vs the same weight case.
 
-### Classes vs No Classes
+### Classes vs No Classes (TO DO)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/db4d360a-0c30-4ce4-a851-da7e1c141403)
 
-1. No Classes (Weighted)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b318c777-0abc-4740-a55e-74a5e3492a92)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/00495747-3cff-41fb-adea-4043ee39c7ec)
+**CASE 1:** Classes, Weighted
 
-2. No Classes (Weight = 1)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2971492d-c0e9-46e7-bebc-be5cd28c34bd)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4a1bffca-ec99-43ea-ab1b-533b9a9570b7)
+**CASE 2:** No Classes, Weighted
+
+### Analysis 
 
 ### Size of graph
 
-1. Number of documents = 100; Classes; Weighted
+**CASE 1:** Number of Documents = 5; Classes; Weighted
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
+
+**CASE 2:** Number of documents = 100; Classes; Weighted
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/578ddc2f-adb6-419f-8571-7cd211856cba)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74441f6e-af47-42d7-828e-b26bbe1b6e06)
@@ -132,98 +175,6 @@ Although the document recommended is the same as the weighted case, its pagerank
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/fdb084cb-81f9-4441-96f1-592a84e89b2a)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d0ecea8e-32d6-47da-a821-369fe2867082)
 
-2. Number of documents = 100; No Classes; Weighted
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/06e81502-64f7-4772-b48e-898b24d67056)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/ff3a7737-35dd-45e9-b850-1c0c9d1cc0d7)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/67aacd1d-2eac-480e-86f8-f06e1585954a)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/86af40b9-47d4-42ea-8e7c-270372a0f5a8)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/898d247e-22bd-4a72-946d-a8f63b5b4bdb)
-
-3. Number of document = 100; Classes; Weight = 1
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/40e0f259-1f5a-4dc6-bd32-28f11246b661)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/97dd3d51-d060-41c1-b6c0-18d32405903e)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/0f911f51-037c-4883-892a-17ff67a6e654)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bff59b03-bcb0-40e9-bae6-fb9f3ebd4a44)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/587760d2-d51f-452d-ac5c-ebf51c1162e0)
-
-4. Number of document = 100; No Classes; Weight = 1
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/af490b70-685e-49e8-a010-f7ef85e1c4e8)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b7d5b758-211a-41e6-b56b-a930428d39f4)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/701a0f5c-8fd5-4625-9282-49171f1301ef)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/064ca22d-2ce9-42f0-af42-98c6c39f843e)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/6b86847c-dc7f-4a4e-90bc-bbef6f46e5d1)
-
-### Analysis so far:
-In the experiments above, the presence of classes don't affect the result of the document recommended to the user. 
-
-However, it affects the pagerank scores. Classes do increase the confidence of the document that is recommended to the user, as the score is higher in the case where there are classes vs the case where there aren't. This might be more crucial when the graph becomes more convoluted, when the user likes more entities that are in common with other documents and so on.
-
-This is also evident where we compare weighted vs same weights. In the experiments above, the presence of weighted links did not necessarily change the outcome of the recommended document. 
-
-However, it did result in slightly different pagerank scores. Weighted relationships do increase the confidence of the document that is recommended to the user. Again, the significance of this difference might only be more apparent when the graph becomes more convoluted. 
-
-One reason why the pagerank recommendations remain the same whether weighted or not and whether there are classes or not is that the weights in the weighted case are all very much similar (in the 0.6 to 0.7 range) which makes the graph very similar to an unweighted case already.
-
-# Real Life Case
-
-1. Number of documents = 100; Classes; Weighted; More connections
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/28b20e52-3164-495c-8215-105134e20262)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d0c32b3c-d3d2-4cf7-b3de-d817f619f967)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/52b975a2-9916-4cc2-90c8-9babdfa5a65f)
-
-2. Number of documents = 100; No Classes; All same weight; More connections
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c46154e6-787a-41fe-adf1-6fe122783f4b)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/473082bf-2963-4579-b184-db949ab40f2e)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/3be5d3e4-f5fe-4c54-8bd2-cbb9db79b6a4)
-
-# Better experiment Part 1 (Testing of Weights)
-
-- Make the user's preference for a certain document to be very obvious than the rest
-- But still remain that he likes random entities from random documents
-- The goal is to make the links between the user and the entities of a document very skewed (eg. 0.9) while the rest are low (eg. 0.2)
-- Change the probability_rate constant from 0.5 to 0.9
-- Change the default weight of the IS_SIMILAR_TO and HAS relationships from 0.7 to a range (eg. 0.3 - 0.9)
-- Use smaller number of documents for easier analysis
-- Compare this case to the case where all relationships are 1 and there are no classes.
-
-
-
-# Better experiment Part 2 (Testing of Classes)
-
-Purpose of classes: to form more possible connections to documents that can be recommended (the ranking of documents is more meaningful)
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
-
-**CASE 3 & CASE 4:**
-- Documents which have more 'locations' entities:
-  - document 3, 14, 7, 2, 4, 1
-- User '127.0.0.1' (likes mainly 'locations'): [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2]
-
-3. Documents = 20, Weighted, Classes
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a5c2f2c2-d79d-44f6-9a0d-ead92aa444e6)
-
-**ORDER:**
-**SAME:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
-
-4. Documents = 20, Weighted, No Classes
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
-
-**ORDER:**
-**Same:** 3, 19 **Different:** 13, 6, 9, 4, 14, 10, 2, 12, 16, 18, 1, 20, 11. Zeros: 15, 17, 5, 7, 8
-
-### Analysis
-
-As can be seen, there is indeed a difference in the ranking of the pageranks, this will matter when we select the top k documents to show to the user. The classes help to ensure that the the order of the documents is more meaningful.
-
-# Better experiment Part 3 (Testing of both classes and weights combined)
-
-**CASE 5 & CASE 6:**
-
-5. Documents = 20, Weighted, Classes (Base Case)
-
-6. Documents = 20, All weights = 1, No Classes
+### Analysis 
+- In both cases (5 documents vs 100 documents), the user recommendation is correct (11.0.0.1).
+- However, the durations to project the graph, to assign the graph embeddings and to ultimately recommend a user were all longer in the case where there was 100 documents vs 5 documents.
