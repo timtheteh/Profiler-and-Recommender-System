@@ -1,69 +1,61 @@
 # Profiler and Recommender System
 
-Goal: To recommend 'Documents' to 'Users'
+### What is the goal of this project?
 
-Solution: Enhance the graph by
-1. Enhancing user profiles (by adding user's interested entities into graoh along with a user-entity edge that has a weight calculated based on frequency and recency of query)
-2. Enhancing the the graph by adding entity-class relationships which help to improve the personalised pagerank algrithm
+1. To find a way to profile users based on their search inputs.
+2. To find a way to improve the personalised pagerank algorithm results in Neo4j
 
-Step 1: Populate the graph database
+### Methodology
 
-Files: addPredefinedClasses.py, addingDocuments.py
-addPredefinedClasses.py:
-  - These are predefined class nodes which entities will be linked to
-addingDocuments.py:
-  - Documents are randomly generated based on a whitelist of keywords
-  - These keywords are then extracted
-  - Links between the document and the extracted keywords are formed with a default value of 0.7 first
-  - Links between the extracted keywords and the predefined classes are also formed.
+**Solution**
+To improve the results of the personalised pagerank algorithm, the graph database is manipulated:
+1. User profiles in the graph database are enhanced by connecting users to the entities they searched for.
+2. Each relationship in the graph is weighted. In particular, the 'LIKES' relationship between users and their entities are constantly updated based on the frequency of the query, and the recency of the query. 
+3. 'Class' nodes are added to make the paths between documents and other documents, and documents to users, more connected. 
 
-Step 2: Logging and Adding entities to enhance a user profile
+**Step 1: Initialising the Graph Database**
+- Files: addPredefinedClasses.py, addingDocuments.py
+- **addPredefinedClasses**:
+  - This file initialises the graph database with predefined 'Class' nodes.
+  - These are 'Class' nodes which act as generic nodes from which large groups of entities can be connected to.
+- **addingDocuments**:
+  - This file initialises the graph database with mock 'Document' nodes.
+  - These nodes represent documents which will eventually be uploaded into the graph database.
+  - Each document is randomly generated based on a list of keywords (a whitelist or domain specific keywords).
+  - These documents will then have their entities extracted out (by means of text matching).
+  - This is how the respective 'Document' nodes and their respective 'Entity' nodes are linked (via a 'HAS' relationship). The weight of each 'HAS' relationship is randomly assigned between 0.3 and 0.9.
+  - These entities are also assigned to their predefined 'Class' nodes (via a 'IS_SIMILAR_TO' relationship. Likewise, the weight of each 'IS_SIMILAR_TO' relationship is randomly assigned between 0.3 and 0.9.
 
-Files: loggingToES.py, addingToProfile.py
+**Step 2: Logging and Adding Entities to Enhance a User's Profile**
+- Files: loggingToES.py, addingToProfile.py
+- **loggingToES**:
+  - User's search inputs are logged into Elastic Search (batch queries)
+  - These logs contain information about who is the user, what did they search for, the datetime of their query, just to name a few
+- **addingToProfile:**
+  - Elastic Search is then queried to only retrieve the new queries that have been added.
+  - For each query, a 'User' node is created only if the user is a new user.
+  - Based on these new queries, the entities are extracted with the help of a LLM (we used vicuna-7b) as well as text matching with a whitelist.
+  - Each entity and its links to the user and 'Class' nodes are then created based on a few test cases. 
+  - Some check include:
+    - Does this entity already exist?
+    - Is this entity aready similar to any existing node in the graph database? And is there already a relationship between the user and this entity?
+    - If this is a new node, make sure to connect to at least one 'Class' node. This can be done so by the predefined 'Class' nodes or via cosine similarity (semantic comparisons)
+    - Entities: datetimeadded, vector, name
+    - 'LIKES' Relationship: freq, rec, weight
+    - 'IS_SIMILAR_TO' Relationship: weight
+  - At the end of each addition to the graph, each link's recency and weight properties in the graph is again updated.
 
-Test Case 1
-1. A node of the same name as the entity in question (EIQ) already exists
-2. There is an existing LIKES relationship between this node and the user
-Action: update this relationship's properties (freq, rec, weight) based on logs and update the datetimeadded of the entity
-
-Test Case 2
-1. A node of the same name as the entity in question (EIQ) already exists
-2. There is NO existing LIKES relationship between this node and the user
-Action: form a new LIKES relationship between user and the entity and give its properties (freq, rec, weight) based on logs and update the datetimeadded of the entity
-
-Test Case 3
-1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
-Action: create the EIQ first with its corresponding vector embedding and datetimeadded and create link between entity and class via predefined relationships if entity is in the predefined list
-2. Find the most similar existing entity node in the graph and its similarity score
-3. Similarity score is < threshold_for_similarity (not similar to any existing node)
-Action: form a new LIKES relationship between user and EIQ and find the most similar 'Class' node(s) to link it to
-
-Test Case 4
-1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
-Action: create the EIQ first with its corresponding vector embedding and datetimeadded
-2. Find the most similar existing entity node in the graph and its similarity score
-3. Similarity score is > threshold_for_similarity (there is already a node similar to EIQ)
-4. A relationship between user and this node already exists
-Action: update this relationship's properties (freq, rec, weight) based on logs and delete the EIQ
-
-Test Case 5
-1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
-Action: create the EIQ first with its corresponding vector embedding and datetimeadded
-2. Find the most similar existing entity node in the graph and its similarity score
-3. Similarity score is > threshold_for_similarity (there is already a node similar to EIQ)
-4. A relationship between user and this node DOES NOT already exist
-Action: form a new LIKES relationship between user and the entity and give its properties (freq, rec, weight) based on logsand delete the EIQ
-
-Test Case 6: Base Case
-1. A node of the same name as the entity in question (EIQ) DOES NOT already exist 
-Action: create the EIQ first with its corresponding vector embedding and datetimeadded
-2. EIQ is the only entity node in graph
-Action: form a new LIKES relationship between user and the entity and give its properties (freq, rec, weight) based on logs and link EIQ to the correct classes
-
-Step 3: Recommendation
-
-Files: recommendation.py
-  - runs a personalised pagerank algorithm to get the highest ranked document to recommend to user
+**Step 3: Recommendation**
+- File: recommendation.py
+- A projection of the graph database is created. Nodes with no outgoing links are excluded to avoid unncessary 'sinks' in the personalised pagerank algorithm.
+- **Document Recommendation**
+  - For a personalised recommendation, source nodes are needed to bias the pagerank algorithm
+  - These source nodes are the top k (eg. 5) entities which have the strongest links (based on weights) between the user. These top k entities represent the entities which the user is most interested in, and hence the pagerank algorithm will be biased based on these nodes (random jump to these source nodes with probability = 1 - damping_factor)
+  - The inbuilt personalised pagerank algoritm in Neo4j is then run based on these source nodes as bias.
+  - Nodes with 'Document' label will be filtered and the top N documents will be recommended to the user.
+- **User Recommendation**
+  - For now, each node in the graph will have a node embedding calculated for it using the inbuilt fastRP algorithm in Neo4j.
+  - Nodes with 'User' label apart from the user in question will be recommended as the most similar users to be recommended (similar interests).
 
 # Initial Experiments
 
