@@ -189,7 +189,7 @@ CASE 1 & CASE 2:
 
 ### Analysis
 
-Here, we choose the top 5 interest nodes as the source nodes (based on the weight of the LIKES relationships) as the basis for the personalised pagerank. The recommendation when it is weighted is hence more menaingful than when all the weights are equal.
+Here, we choose the top 5 interest nodes as the source nodes (based on the weight of the LIKES relationships) as the basis for the personalised pagerank. The recommendation when it is weighted is hence more meaningful than when all the weights are equal.
 
 ### Better experiment Part 2 (Testing of Classes)
 
