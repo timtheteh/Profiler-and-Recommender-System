@@ -15,7 +15,7 @@ import string
 es_url = "https://localhost:9200"
 index="test2"
 es_username = "elastic"
-es_password = "e4uwp3kZm6maRubko8g0"
+es_password = "n*9jIwl3jw8ryhQhlmX0"
 # Neo4j graph database
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -27,7 +27,7 @@ vicuna_temperature = 0
 # Parameter 2 (to see if entity in question is similar to any existing nodes): change this to have less new nodes in graph. lower -> less new nodes
 threshold_for_similarity = 0.65
 # Parameter 3 (for weights of LIKES relationship): change this to have gradual/drastic changes in probability of weights
-probability_rate = 0.5
+probability_rate = 0.9
 # Parameter 4 (to see if entity in question is similar to any class nodes) change this to have node point to more classes
 class_threshold = 0.6
 # Parameter 5: after this number of days, frequency of query is no longer relevant and consequently, wieght of LIKES relationship is zero.
