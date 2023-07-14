@@ -144,7 +144,7 @@ However, it did result in slightly different pagerank scores. Weighted relations
 
 One reason why the pagerank recommendations remain the same whether weighted or not and whether there are classes or not is that the weights in the weighted case are all very much similar (in the 0.6 to 0.7 range) which makes the graph very similar to an unweighted case already.
 
-### Real Life Case
+# Real Life Case
 
 1. Number of documents = 100; Classes; Weighted; More connections
 
@@ -158,7 +158,7 @@ One reason why the pagerank recommendations remain the same whether weighted or 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/473082bf-2963-4579-b184-db949ab40f2e)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/3be5d3e4-f5fe-4c54-8bd2-cbb9db79b6a4)
 
-### Better experiment Part 1 (Testing of Weights)
+# Better experiment Part 1 (Testing of Weights)
 
 - Make the user's preference for a certain document to be very obvious than the rest
 - But still remain that he likes random entities from random documents
@@ -168,7 +168,7 @@ One reason why the pagerank recommendations remain the same whether weighted or 
 - Use smaller number of documents for easier analysis
 - Compare this case to the case where all relationships are 1 and there are no classes.
 
-CASE 1 & CASE 2:
+**CASE 1 & CASE 2:**
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/55b6ade1-6493-4aab-8b48-811bc3c77eb3)
 
@@ -191,13 +191,13 @@ CASE 1 & CASE 2:
 
 Here, we choose the top 5 interest nodes as the source nodes (based on the weight of the LIKES relationships) as the basis for the personalised pagerank. The recommendation when it is weighted is hence more meaningful than when all the weights are equal.
 
-### Better experiment Part 2 (Testing of Classes)
+# Better experiment Part 2 (Testing of Classes)
 
 Purpose of classes: to form more possible connections to documents that can be recommended (the ranking of documents is more meaningful)
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
 
-CASE 3 & CASE 4:
+**CASE 3 & CASE 4:**
 - Documents which have more 'locations' entities:
   - document 3, 14, 7, 2, 4, 1
 - User '127.0.0.1' (likes mainly 'locations'): [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2]
@@ -218,18 +218,10 @@ CASE 3 & CASE 4:
 
 As can be seen, there is indeed a difference in the ranking of the pageranks, this will matter when we select the top k documents to show to the user. The classes help to ensure that the the order of the documents is more meaningful.
 
-CASE 5 & CASE 6:
-- User '127.0.0.1' (likes mainly 'locations'):
-    - Likes document 7 alot: [yishun 2 times, sembawang 8 times, mandai 6 times, yishun pond 10 times]
-    - Likes as many entities in document 1 as in document 7, but the weights are different: [jurong 1 time, jurong island 1 time, evac 1 time, stagmont road 1 time]
-    - Likes document 6 decently: [seletar 2 times, airbase 2 times]
-    - Likes document 8 decently: [psydef 2 times, ids 2 times]
-    - Likes document 10 minimally: [weaponization 1 time]
-    - Likes document 3 minimally: [heli 1 time]
-- User '10.0.0.1' -> also likes 'locations':
-    - Likes [jurong east 2 times, changi 4 times, changi air base 3 times]
-- User '11.0.0.1' -> instead likes 'Category 4'
-    - Likes [heli 2 times, gsmb 3 times, icbm 4 times]
+# Better experiment Part 3 (Testing of both classes and weights combined)
+
+**CASE 5 & CASE 6:**
+
 5. Documents = 20, Weighted, Classes (Base Case)
 
 6. Documents = 20, All weights = 1, No Classes
