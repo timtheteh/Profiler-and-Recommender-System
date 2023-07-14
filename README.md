@@ -133,7 +133,7 @@ Although the document recommended is the same as the weighted case, its pagerank
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/064ca22d-2ce9-42f0-af42-98c6c39f843e)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/6b86847c-dc7f-4a4e-90bc-bbef6f46e5d1)
 
-### Conclusion:
+### Analysis so far:
 In the experiments above, the presence of classes don't affect the result of the document recommended to the user. 
 
 However, it affects the pagerank scores. Classes do increase the confidence of the document that is recommended to the user, as the score is higher in the case where there are classes vs the case where there aren't. This might be more crucial when the graph becomes more convoluted, when the user likes more entities that are in common with other documents and so on.
@@ -141,6 +141,8 @@ However, it affects the pagerank scores. Classes do increase the confidence of t
 This is also evident where we compare weighted vs same weights. In the experiments above, the presence of weighted links did not necessarily change the outcome of the recommended document. 
 
 However, it did result in slightly different pagerank scores. Weighted relationships do increase the confidence of the document that is recommended to the user. Again, the significance of this difference might only be more apparent when the graph becomes more convoluted. 
+
+One reason why the pagerank recommendations remain the same whether weighted or not and whether there are classes or not is that the weights in the weighted case are all very much similar (in the 0.6 to 0.7 range) which makes the graph very similar to an unweighted case already.
 
 ### Real Life Case
 
@@ -155,3 +157,21 @@ However, it did result in slightly different pagerank scores. Weighted relations
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c46154e6-787a-41fe-adf1-6fe122783f4b)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/473082bf-2963-4579-b184-db949ab40f2e)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/3be5d3e4-f5fe-4c54-8bd2-cbb9db79b6a4)
+
+### Better experiment
+
+- Make the user's preference for a certain document to be very obvious than the rest
+- But still remain that he likes random entities from random documents
+- The goal is to make the links between the user and the entities of a document very skewed (eg. 0.9) while the rest are low (eg. 0.2)
+- Change the probability_rate constant from 0.5 to 0.9
+- Change the default weight of the IS_SIMILAR_TO and HAS relationships from 0.7 to a range (eg. 0.3 - 0.9)
+- Use smaller number of documents for easier analysis
+- Compare this case to the case where all relationships are 1 and there are no classes.
+
+1. Documents = 10, Weighted, Classes (Base Case)
+
+2. Documents = 10, Weighted, No Classes
+
+3. Documents = 10, All weights = 1, Classes
+
+4. Documents = 10, All Weights = 1, No Classes
