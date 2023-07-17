@@ -145,7 +145,7 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 
 **Order of recommendation:** 15, 13, 8, 17, 11, 12, 6, 20, 5, 19, 2, 16, 18, 4, 7, 1, 14, 10, 3, 9
 
-**CASE 6:** Documents = 20, All weights = 1, No Classes
+**CASE 6:** Documents = 20, All weights = 100, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b39611e8-74b7-4073-9725-f48ee47d71a7)
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63feba9e-9f36-456e-ba2e-8a2e482e0295)
@@ -167,17 +167,24 @@ In conclusion, weighted connections and the inclusion of generic class nodes do 
 # Testing and Results for User Recommendations 
 
 ### Test 1: Weighted vs Unweighted vs All same weight
+
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 
-**CASE 1:** Weighted case
+- User '127.0.0.1' likes 'Locations' alot: [Simpang 10 times, tengah air base 10 times, depot road 10 times]
+- User '10.0.0.1' also likes 'Locations' alot: [jurong 10 times, name: dieppe barracks 10 times, depot road camp 10 times]
+- User '11.0.0.1' also likes 'Locations', but only decently: [novena 5 times, serangoon 3 times]
+- User '12.0.0.1' also likes 'Locations', but only minimally, and also likes Category 2: [seletar 1 time, dorset 5 times, csr 5 times]
+- User '13.0.0.1' likes something else completey (Category 2): [comms 10 times, cyber 10 times, eacmt 10 times]
+
+**CASE 1:** Number of documents = 10, Users = 5, Classes, Weighted
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
 
-**CASE 2:** Unweighted case (weight = 0)
+**CASE 2:** Number of documents = 10, Users = 5, Classes, Unweighted (Weight = 0)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8f92be35-0474-4bde-92dd-ae201045fce6)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/131a6adc-9ad8-42da-bc2a-1ad8e67b47f0)
 
-**CASE 3:** Same weight (weight = 1)
+**CASE 3:** Number of documents = 10, Users = 5, Classes, Same weight (Weight = 100)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bddf5ce6-5137-44b3-a136-61a56dd47863)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/82c4e2a9-ac1c-4ff2-bf15-9f4c5bcfada2)
 
@@ -189,20 +196,20 @@ In conclusion, weighted connections and the inclusion of generic class nodes do 
 ### Classes vs No Classes (TO DO)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/db4d360a-0c30-4ce4-a851-da7e1c141403)
 
-**CASE 1:** Classes, Weighted
+**CASE 4:** Number of documents = 10, Users = 5, Weighted, Classes
 
-**CASE 2:** No Classes, Weighted
+**CASE 5:** Number of documents = 10, Users = 5, Weighted, No Classes
 
 ### Analysis 
 
 ### Size of graph
 
-**CASE 1:** Number of Documents = 5; Classes; Weighted
+**CASE 6:** Number of documents = 10, Users = 5, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
 
-**CASE 2:** Number of documents = 100; Classes; Weighted
+**CASE 7:** Number of documents = 100, Users = 5, Weighted, Classes
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/578ddc2f-adb6-419f-8571-7cd211856cba)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74441f6e-af47-42d7-828e-b26bbe1b6e06)
