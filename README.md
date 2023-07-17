@@ -77,7 +77,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 # Testing and Results for Document Recommendations
 
 ### Test 1: Do weights improve the document recommendation?
-### Result: Yes, weighted likes improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
+### Result: Yes, weighted links improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
 
 **CASE 1 & CASE 2:**
 
