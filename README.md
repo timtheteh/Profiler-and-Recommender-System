@@ -5,6 +5,14 @@
 1. To find a way to profile users based on their search inputs.
 2. To find a way to improve the personalised pagerank algorithm results in Neo4j
 
+### Purpose of profiler and recommender system
+
+The purpose is to generate robust and personalised recommendations to users by:
+
+1. Recommending existing documents to users
+2. Recommending similar profiles to users
+3. Recommending new documents to relevant users only
+
 ### Introduction of Graph Database
 
 - Entities: words of phrases that are present in user searches / documents
@@ -32,6 +40,7 @@ Other features:
 
 1. Documents: they can represent anything you want to recommend to the user (articles, web links, etc)
 2. Links between documents and their entities: these entities may not need to be extracted based on its contents, it can be likes hashtags (descriptions) that users can choose for the document before adding them into the database
+3. Recommending new documents to relevant users only
 
 ### Methodology
 
