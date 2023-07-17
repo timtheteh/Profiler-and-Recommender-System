@@ -60,6 +60,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 # Testing and Results for Document Recommendations
 
 ### Test 1: Do weights improve the document recommendation?
+### Result: Yes, weighted likes improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
 
 **CASE 1 & CASE 2:**
 
@@ -89,6 +90,7 @@ In the unweighted case (Case 2) where the weights of each relationship is set th
 In addition, the weighted case shows an extremely confident answer in its recommendation. The pagerank score of Document 5 far exceeds that of any other document in the list. This shows that a weighted case does help with providing more menaingful recommendations.
 
 ### Test 2: How do 'Class' nodes help with the document recommendation?
+### Result: 'Class' nodes improve the ranking of the documents, by forming seemingly unexpected connections between documents, hence forming a more robust 'for-you page' (similar to that of social media platforms)
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
 
@@ -120,7 +122,7 @@ As can be seen, there is indeed a difference in the ranking of the pageranks, th
 
 In the case where there are no 'Class' nodes, potential documents such as Document 7 can be totally excluded in the top N documents to recommend as the pagerank score for such documents can even be 0, which is undesirable.
 
-### Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation? (TO DO)
+### Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation?
 
 **CASE 5 & CASE 6:**
 
