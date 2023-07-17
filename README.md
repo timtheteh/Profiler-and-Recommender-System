@@ -51,7 +51,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 - **Document Recommendation**
   - For a personalised recommendation, source nodes are needed to bias the pagerank algorithm
   - These source nodes are the top k (eg. 5) entities which have the strongest links (based on weights) between the user. These top k entities represent the entities which the user is most interested in, and hence the pagerank algorithm will be biased based on these nodes (random jump to these source nodes with probability = 1 - damping_factor)
-  - The inbuilt personalised pagerank algoritm in Neo4j is then run based on these source nodes as bias.
+  - The inbuilt personalised pagerank algoritm in Neo4j is then run based on these source nodes as bias. (https://neo4j.com/docs/graph-data-science/current/algorithms/page-rank/)
   - Nodes with 'Document' label will be filtered and the top N documents will be recommended to the user.
 - **User Recommendation**
   - For now, each node in the graph will have a node embedding calculated for it using the inbuilt node2vec algorithm in Neo4j. (https://neo4j.com/docs/graph-data-science/current/machine-learning/node-embeddings/node2vec/)
