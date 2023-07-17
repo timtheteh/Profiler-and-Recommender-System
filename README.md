@@ -125,12 +125,29 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 ### Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation?
 
 **CASE 5 & CASE 6:**
+- User '127.0.0.1':
+    - Likes document 15 alot: [authentication 10, paces 10, maju camp 10, sysops 10]
+    - Likes as many entities in document 5 as in document 15, but the weights are different: [flavian 1, rochor 1, dump truck 1, himars 1]
+    - Likes as many entities in document 12 as in document 15, but the weights are different: [osc 1, s-net 1, fbt 1 time, gdn 1 time]
+    - Likes as many entities in document 8 as in document 15, but the weights are different: [myoasis 1, orchard road 1, west coast pier 1 time, counter 1]
+    - Likes as many entities in document 11 as in document 15, but the weights are different: [emart 1, emergency 1, keylogger 1, gombak 1]
+    - Likes document 13 decently: [hfo 2 times, msm 2 times]
+    - Likes document 2 decently: [spyware 2 times, sentosa 2 times]
+    - Likes document 3 minimally: [singtel 1 time]
 
 **CASE 5:** Documents = 20, Weighted, Classes (Base Case)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/428a9e2c-2cf9-4d26-ae75-469ac6a0e768)
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/57844f35-fcf3-4d22-83f6-faf4b4833b8b)
 
 **CASE 6:** Documents = 20, All weights = 1, No Classes
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b39611e8-74b7-4073-9725-f48ee47d71a7)
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63feba9e-9f36-456e-ba2e-8a2e482e0295)
 
 ### Analysis
+
+
 
 # Testing and Results for User Recommendations
 
