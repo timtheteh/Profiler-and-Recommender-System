@@ -19,7 +19,7 @@ Other features:
 1. The main limitation of this application so far is that the extraction of entities is done with the help of LLMs (vicuna-7b). LLMs help with more robust entity extractions, but the entities extracted may be unpredictable at times.
 2. The way in which the 'HAS' relationship between documents and their intrinsic entities is also unknown at this point. In addition, the way in which the 'IS_SIMILAR_TO' relationship between document entities and the class nodes is also unknown at this point.
 3. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase.
-  - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
+    - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
 
 ### Methodology
 
