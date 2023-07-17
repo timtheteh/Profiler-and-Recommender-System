@@ -140,10 +140,18 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/57844f35-fcf3-4d22-83f6-faf4b4833b8b)
 
+**Best Recommendation:** Document 15 (Correct)
+
+**Order of recommendation:** 15, 13, 8, 17, 11, 12, 6, 20, 5, 19, 2, 16, 18, 4, 7, 1, 14, 10, 3, 9
+
 **CASE 6:** Documents = 20, All weights = 1, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b39611e8-74b7-4073-9725-f48ee47d71a7)
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63feba9e-9f36-456e-ba2e-8a2e482e0295)
+
+**Best Recommendation:** Document 8 (Wrong)
+
+**Order of recommendation:** 8, 12, 15, 11, 5, 20, 13, 2, 3, 6, 10, 7, 16, 17. **Zeros:** 1, 14, 18, 19, 4, 9 
 
 ### Analysis
 
