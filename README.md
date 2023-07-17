@@ -198,14 +198,35 @@ Recommended user to '127.0.0.1': '11.0.0.1' (Incorrect)
 Only the weighted case gave the right expected answer. 
 
 ### Test 2: How does the inclusion of "Class" nodes affect which user gets recommended to the target user?
+### Result: Without class nodes, the recommended user is consistently wrong.
 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/db4d360a-0c30-4ce4-a851-da7e1c141403)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/1004ecb9-6383-45f5-ae0e-d0a3176cc6d2)
 
-**CASE 4:** Number of documents = 10, Users = 5, Weighted, Classes
+- User '127.0.0.1' likes 'Locations' alot: [pasir laba camp 10 times, dieppe barracks 10 times, upper seletar reservoir 10 times]
+- User '10.0.0.1' also likes 'Locations' alot: [pioneer road 10 times, selarang ring road 10 times, pulau ubin 10 times]
+- User '11.0.0.1' likes same things as '10.0.0.1' but less strongly: [pioneer road 1 times, selarang ring road 1 times, pulau ubin 1 times]
+- User '12.0.0.1' also likes 'Locations', but only decently: [seletar 5 times, sembawang 5 times]
+- User '13.0.0.1' also likes 'Locations', but only decently: [mandai 1 time, jurong east 1 time, ladang camp 1 time]
+- User '14.0.0.1' also likes 'Locations', but only minimally, and also likes Category 2: [seletar 1 time, dsta 3 times, drone 3 times]
+- User '15.0.0.1' likes something else completey (Category 2): [drone 5 times, cyber 5 times, cyber-attack 5 times]
 
-**CASE 5:** Number of documents = 10, Users = 5, Weighted, No Classes
+**CASE 4:** Number of documents = 10, Users = 7, Weighted, Classes
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/08647663-5356-4e3f-9d41-9c9572be0126)
+
+Best user recommended: 10.0.0.1 (correct), though not very consistent
+
+**CASE 5:** Number of documents = 10, Users = 7, Weighted, No Classes
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/5d465878-e2e7-4a55-a6e4-08d69049440e)
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/85a07d92-31b9-4233-aa04-5ed88cbb389d)
+
+Best user recommended: 14.0.0.1 (consistently wrong)
 
 ### Analysis 
+
+The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistently the case. The reason is that the node embeddings change with time as the weights change (because the recency changes). However, this is still a better case than Case 5, where the user recommended is consistly wrong. 
 
 ### Size of graph
 
