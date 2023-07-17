@@ -12,6 +12,7 @@
 
 Other features:
 - Application is flexible to spelling mistakes (for eg. a user mispells 'apple' as 'aple' and assuming 'apple' already exists in the graph database. 'aple' will first be compared to 'apple' via semantic comparison of their respective vectors. If the comparison score is higher than a certain threshold, it will be assumed that the user meant 'apple' instead of 'apel', and a connection between the user and the existing 'apple' node will be formed. Otherwise, a new node 'apel' will be formed.
+- Each entity is added to at least one 'class' node.
 
 ### Limitations
 
@@ -50,7 +51,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
   - For each query, a 'User' node is created only if the user is a new user.
   - Based on these new queries, the entities are extracted with the help of a LLM (we used vicuna-7b) as well as text matching with a whitelist.
   - Each entity and its links to the user and 'Class' nodes are then created based on a few test cases. 
-  - Some check include:
+  - Some checks include:
     - Does this entity already exist?
     - Is this entity aready similar to any existing node in the graph database? And is there already a relationship between the user and this entity?
     - If this is a new node, make sure to connect to at least one 'Class' node. This can be done so by the predefined 'Class' nodes or via cosine similarity (semantic comparisons)
