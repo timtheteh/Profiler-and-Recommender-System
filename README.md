@@ -117,7 +117,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 **CASE 2:** Documents = 20, All weights = 100, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/524554a1-b213-4fde-a891-e3edc16dd59b)
 
-### Analysis
+## Analysis
 
 The weighted case (Case 1) shows the correct document (Document 5) as the document to be recommended, which reaffirms that weighted links do help with the personalised recommendation.
 
