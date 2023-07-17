@@ -277,3 +277,8 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 ### Analysis 
 - In both cases (5 documents vs 100 documents), the user recommendation is correct (11.0.0.1).
 - However, the durations to project the graph, to assign the graph embeddings and to ultimately recommend a user were all longer in the case where there was 100 documents vs 5 documents.
+
+# Bonus Feature 1: Choosing which user to recommend a document to
+
+# Bonus Feature 2: Periodic Pruning of Graph Database
+
