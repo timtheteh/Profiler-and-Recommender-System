@@ -155,9 +155,11 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 
 ### Analysis
 
+**Correctness:** It can be seen that Case 5 (weighted, classes) is more correct as its best recommendation was correct. 
 
+**Order of recommendation:** The top recommendations in Case 6 (unweighted, no classes) is isolated only to the documents which have entities that the user explicitly searched for. On the other hand, the top recommendations in Case 5 (weighted, classes) are more varied, though most of them are documents with entities that the user explicitly searched for. For example, it recommended document 17 as the 4th best recommendation. Document 17 does not share any common entities with what the user searched for. However, because it has entities that are connected to common classes such as "
 
-# Testing and Results for User Recommendations
+# Testing and Results for User Recommendations 
 
 ### Test 1: Weighted vs Unweighted vs All same weight
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
