@@ -123,6 +123,7 @@ As can be seen, there is indeed a difference in the ranking of the pageranks, th
 In the case where there are no 'Class' nodes, potential documents such as Document 7 can be totally excluded in the top N documents to recommend as the pagerank score for such documents can even be 0, which is undesirable.
 
 ### Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation?
+### Result: Yes. They help with the correctness and robustness of the recommendation(s)
 
 **CASE 5 & CASE 6:**
 - User '127.0.0.1':
