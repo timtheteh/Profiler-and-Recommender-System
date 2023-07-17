@@ -96,7 +96,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 # Testing and Results for Document Recommendations
 
 ## Test 1: Do weights improve the document recommendation?
-## Result: Yes, weighted links improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
+### Result: Yes, weighted links improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
 
 **CASE 1 & CASE 2:**
 
@@ -125,7 +125,7 @@ In the unweighted case (Case 2) where the weights of each relationship is set th
 
 In addition, the weighted case shows an extremely confident answer in its recommendation. The pagerank score of Document 5 far exceeds that of any other document in the list. This shows that a weighted case does help with providing more menaingful recommendations.
 
-### Test 2: How do 'Class' nodes help with the document recommendation?
+## Test 2: How do 'Class' nodes help with the document recommendation?
 ### Result: 'Class' nodes improve the ranking of the documents, by forming seemingly unexpected connections between documents, hence forming a more robust 'for-you page' (similar to that of social media platforms)
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
@@ -150,7 +150,7 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 
 **Same:** 3, 19 **Different:** 13, 6, 9, 4, 14, 10, 2, 12, 16, 18, 1, 20, 11. **Zeros:** 15, 17, 5, 7, 8
 
-### Analysis
+## Analysis
 
 As can be seen, there is indeed a difference in the ranking of the pageranks, this will matter when we select the top N documents to show to the user. 
 
@@ -158,7 +158,7 @@ As can be seen, there is indeed a difference in the ranking of the pageranks, th
 
 In the case where there are no 'Class' nodes, potential documents such as Document 7 can be totally excluded in the top N documents to recommend as the pagerank score for such documents can even be 0, which is undesirable.
 
-### Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation?
+## Test 3: How about incorporating both weighted links and 'Class' nodes? Do they together improve the recommendation?
 ### Result: Yes. They help with the correctness and robustness of the recommendation(s)
 
 **CASE 5 & CASE 6:**
@@ -190,19 +190,19 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 
 **Order of recommendation:** 8, 12, 15, 11, 5, 20, 13, 2, 3, 6, 10, 7, 16, 17. **Zeros:** 1, 14, 18, 19, 4, 9 
 
-### Analysis
+## Analysis
 
 **Correctness:** It can be seen that Case 5 (weighted, classes) is more correct as its best recommendation was correct. 
 
 **Order of recommendation:** The top recommendations in Case 6 (unweighted, no classes) is isolated only to the documents which have entities that the user explicitly searched for. On the other hand, the top recommendations in Case 5 (weighted, classes) are more varied, though most of them are documents with entities that the user explicitly searched for. For example, it recommended document 17 as the 4th best recommendation. Document 17 does not share any common entities with what the user searched for. However, because it has entities that are connected to classes (eg. Category 6, Locations, etc) common to documents 15, 13 etc, it is ranked higher as it is deemed as more "similar" to the top documents. 
 
-### Conclusion of Document Recommendation
+## Conclusion for Document Recommendation
 
 In conclusion, weighted connections and the inclusion of generic class nodes do help with the recommendation of documents in 2 ways. FIrstly, weighted connections help with the correctness of the recommendation. Secondly, class nodes help with the robustness of the recommendation.
 
 # Testing and Results for User Recommendations 
 
-### Test 1: How does the weight of the links affect which user is recommended to the target user?
+## Test 1: How does the weight of the links affect which user is recommended to the target user?
 ### Result: Weighted gives the most accurate answer.
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4dc93b83-bdc6-43cf-947e-2707f81a3f94)
@@ -230,10 +230,10 @@ Recommended user to '127.0.0.1': '12.0.0.1' (Incorrect)
 
 Recommended user to '127.0.0.1': '11.0.0.1' (Incorrect)
 
-### Analysis 
+## Analysis 
 Only the weighted case gave the right expected answer. 
 
-### Test 2: How does the inclusion of "Class" nodes affect which user gets recommended to the target user?
+## Test 2: How does the inclusion of "Class" nodes affect which user gets recommended to the target user?
 ### Result: Without class nodes, the recommended user is consistently wrong.
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/1004ecb9-6383-45f5-ae0e-d0a3176cc6d2)
@@ -260,13 +260,13 @@ Best user recommended: 10.0.0.1 (correct), though not very consistent
 
 Best user recommended: 14.0.0.1 (consistently wrong)
 
-### Analysis 
+## Analysis 
 
 The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistently the case. The reason is that the node embeddings change with time as the weights change (because the recency changes). However, this is still a better case than Case 5, where the user recommended is consistly wrong. 
 
 # Testing how does the size of the graph affect the recommendation of documents and users.
 
-### Result: It does not affect the accuracy of the recommendation, but it does increase the time complexity.
+## Result: It does not affect the accuracy of the recommendation, but it does increase the time complexity.
 
 **CASE 6:** Number of documents = 10, Users = 5, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
@@ -281,7 +281,7 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/fdb084cb-81f9-4441-96f1-592a84e89b2a)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d0ecea8e-32d6-47da-a821-369fe2867082)
 
-### Analysis 
+## Analysis 
 - In both cases (5 documents vs 100 documents), the user recommendation is correct (11.0.0.1).
 - However, the durations to project the graph, to assign the graph embeddings and to ultimately recommend a user were all longer in the case where there was 100 documents vs 5 documents.
 
