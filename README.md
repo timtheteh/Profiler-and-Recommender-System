@@ -181,13 +181,16 @@ In conclusion, weighted connections and the inclusion of generic class nodes do 
 **CASE 1:** Number of documents = 10, Users = 7, Classes, Weighted
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/11805193-79e5-45aa-848f-fdd9d9e1e426)
 
+Recommended user to '127.0.0.1': '10.0.0.1' (Correct)
+
 **CASE 2:** Number of documents = 10, Users = 7, Classes, Unweighted (Weight = 0)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8f92be35-0474-4bde-92dd-ae201045fce6)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/131a6adc-9ad8-42da-bc2a-1ad8e67b47f0)
 
 **CASE 3:** Number of documents = 10, Users = 7, Classes, Same weight (Weight = 100)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bddf5ce6-5137-44b3-a136-61a56dd47863)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/82c4e2a9-ac1c-4ff2-bf15-9f4c5bcfada2)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/dd392227-c690-4c20-a895-9a3a388a17ac)
+
+Recommended user to '127.0.0.1': '11.0.0.1' (incorrect)
 
 ### Analysis 
 - In the weighted and the same weight case, the correct user (11.0.0.1) is recommended to the user.
