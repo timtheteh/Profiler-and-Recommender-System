@@ -1,4 +1,4 @@
-# Profiler and Recommender System
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2aa59cbf-bb96-4b5e-8d57-b6aa18cf6398)# Profiler and Recommender System
 
 ### What is the goal of this project?
 
@@ -168,23 +168,24 @@ In conclusion, weighted connections and the inclusion of generic class nodes do 
 
 ### Test 1: Weighted vs Unweighted vs All same weight
 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4dc93b83-bdc6-43cf-947e-2707f81a3f94)
 
 - User '127.0.0.1' likes 'Locations' alot: [Simpang 10 times, tengah air base 10 times, depot road 10 times]
-- User '10.0.0.1' also likes 'Locations' alot: [jurong 10 times, name: dieppe barracks 10 times, depot road camp 10 times]
-- User '11.0.0.1' also likes 'Locations', but only decently: [novena 5 times, serangoon 3 times]
-- User '12.0.0.1' also likes 'Locations', but only minimally, and also likes Category 2: [seletar 1 time, dorset 5 times, csr 5 times]
-- User '13.0.0.1' likes something else completey (Category 2): [comms 10 times, cyber 10 times, eacmt 10 times]
+- User '10.0.0.1' also likes 'Locations' alot: [jurong 10 times, dieppe barracks 10 times, depot road camp 10 times]
+- User '11.0.0.1' likes same things as '10.0.0.1' but less strongly: [jurong 1 times, dieppe barracks 1 times, depot road camp 1 times]
+- User '12.0.0.1' also likes 'Locations', but only decently: [novena 5 times, serangoon 5 times, jurong 5 times]
+- User '13.0.0.1' also likes 'Locations', but only decently: [serangoon 1 time, thomson medical centre 1 time, seletar 1 time]
+- User '14.0.0.1' also likes 'Locations', but only minimally, and also likes Category 2: [seletar 1 time, dorset 3 times, csr 3 times]
+- User '15.0.0.1' likes something else completey (Category 2): [comms 5 times, cyber 5 times, eacmt 5 times]
 
-**CASE 1:** Number of documents = 10, Users = 5, Classes, Weighted
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
+**CASE 1:** Number of documents = 10, Users = 7, Classes, Weighted
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/11805193-79e5-45aa-848f-fdd9d9e1e426)
 
-**CASE 2:** Number of documents = 10, Users = 5, Classes, Unweighted (Weight = 0)
+**CASE 2:** Number of documents = 10, Users = 7, Classes, Unweighted (Weight = 0)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8f92be35-0474-4bde-92dd-ae201045fce6)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/131a6adc-9ad8-42da-bc2a-1ad8e67b47f0)
 
-**CASE 3:** Number of documents = 10, Users = 5, Classes, Same weight (Weight = 100)
+**CASE 3:** Number of documents = 10, Users = 7, Classes, Same weight (Weight = 100)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/bddf5ce6-5137-44b3-a136-61a56dd47863)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/82c4e2a9-ac1c-4ff2-bf15-9f4c5bcfada2)
 
