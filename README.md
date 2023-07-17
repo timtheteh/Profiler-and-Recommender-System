@@ -228,7 +228,7 @@ Best user recommended: 14.0.0.1 (consistently wrong)
 
 The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistently the case. The reason is that the node embeddings change with time as the weights change (because the recency changes). However, this is still a better case than Case 5, where the user recommended is consistly wrong. 
 
-### Size of graph
+### Test 3: How does the Size of the graph affect the recommendation of documents and users?
 
 **CASE 6:** Number of documents = 10, Users = 5, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
