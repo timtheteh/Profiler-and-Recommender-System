@@ -174,7 +174,7 @@ def deleteAllExistingGraphs():
 def assignGraphEmbeddings(graphName):
     with graphDB.session() as session:
         result = session.run("""
-        CALL gds.fastRP.stream(
+        CALL gds.beta.node2vec.stream(
             $graphName,
             {
                 embeddingDimension: 4,
@@ -269,14 +269,22 @@ else:
         for j in graphEmbeddings:
             if j['nodeId'] == otherUserId:
                 otherUserEmbedding = j['embedding']
-        if not all(v == 0 for v in otherUserEmbedding):
-            otherUsersEmbeddings[otherUserId] = otherUserEmbedding
+                if not all(v == 0 for v in otherUserEmbedding):
+                    otherUsersEmbeddings[otherUserId] = otherUserEmbedding
+    print("\n", otherUsersEmbeddings, "\n")
     otherUsersEmbeddingSimilarityScores = {}
     for id, embedding in otherUsersEmbeddings.items():
-        cos_sim = dot(user_embedding, embedding)/(norm(user_embedding)*norm(embedding))
-        otherUsersEmbeddingSimilarityScores[id] = abs(cos_sim)
+        cos_sim = dot(user_embedding, embedding)/(norm(embedding)*norm(user_embedding))
+        otherUsersEmbeddingSimilarityScores[id] = cos_sim
+    print("other users embedding sim scores: ", otherUsersEmbeddingSimilarityScores, "\n")
+    justToPrint = {}
+    for u, score in otherUsersEmbeddingSimilarityScores.items():
+        userName = getUserNameFromId(u)
+        justToPrint[userName] = score
+    print("other users: ", justToPrint, "\n")
     if len(otherUsersEmbeddings) != 0:
-        bestUserId = max(otherUsersEmbeddingSimilarityScores)
+        # print("other users recommendations: ", otherUsersEmbeddingSimilarityScores, '\n')
+        bestUserId = max(otherUsersEmbeddingSimilarityScores, key=otherUsersEmbeddingSimilarityScores.get)
         bestUser = getUserNameFromId(bestUserId)
         print("The profile that seems the most similar to your profile is: ", bestUser, '\n')
         timeToRecommendUser = time.time() - start_time
