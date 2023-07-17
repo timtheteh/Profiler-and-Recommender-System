@@ -159,6 +159,10 @@ In the case where there are no 'Class' nodes, potential documents such as Docume
 
 **Order of recommendation:** The top recommendations in Case 6 (unweighted, no classes) is isolated only to the documents which have entities that the user explicitly searched for. On the other hand, the top recommendations in Case 5 (weighted, classes) are more varied, though most of them are documents with entities that the user explicitly searched for. For example, it recommended document 17 as the 4th best recommendation. Document 17 does not share any common entities with what the user searched for. However, because it has entities that are connected to classes (eg. Category 6, Locations, etc) common to documents 15, 13 etc, it is ranked higher as it is deemed as more "similar" to the top documents. 
 
+### Conclusion of Document Recommendation
+
+In conclusion, weighted connections and the inclusion of generic class nodes do help with the recommendation of documents in 2 ways. FIrstly, weighted connections help with the correctness of the recommendation. Secondly, class nodes help with the robustness of the recommendation.
+
 # Testing and Results for User Recommendations 
 
 ### Test 1: Weighted vs Unweighted vs All same weight
