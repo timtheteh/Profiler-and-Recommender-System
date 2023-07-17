@@ -2,6 +2,7 @@ import neo4j
 from numpy import dot
 from numpy.linalg import norm
 import time
+from heapq import nlargest
 
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -48,15 +49,18 @@ def getUserInterestsAsSourceNodes(user_name):
         result = session.run("""
         MATCH (user:User {name: $user_name})
         MATCH (user)-[r1:LIKES]-(ent:Entity)
-        RETURN id(ent)
+        RETURN id(ent), r1.weight
         """, parameters={
             "user_name": user_name
         })
         records = result.data()
-        list_ids = []
+        id_weights = {}
         for record in records:
-            list_ids.append(record['id(ent)'])
-        return list_ids
+            id_weights[record['id(ent)']] = record['r1.weight']
+        print("id weights are here: ", id_weights)
+        top_ids = nlargest(5, id_weights, key=id_weights.get)
+        print("top_ids are here: ", top_ids)
+        return top_ids
 
 def getDocumentEntities(doc_name):
     with graphDB.session() as session:
@@ -170,7 +174,7 @@ def deleteAllExistingGraphs():
 def assignGraphEmbeddings(graphName):
     with graphDB.session() as session:
         result = session.run("""
-        CALL gds.fastRP.stream(
+        CALL gds.beta.node2vec.stream(
             $graphName,
             {
                 embeddingDimension: 4,
@@ -228,7 +232,7 @@ def massUpdateAllRelationshipsToZero():
             MATCH (s)-[r]-(t) 
             SET r.weight = $weight
             """, parameters = {
-                "weight": 100
+                "weight": 0
             })
 
 massUpdateAllRelationshipsToZero()
@@ -265,20 +269,28 @@ else:
         for j in graphEmbeddings:
             if j['nodeId'] == otherUserId:
                 otherUserEmbedding = j['embedding']
-        if not all(v == 0 for v in otherUserEmbedding):
-            otherUsersEmbeddings[otherUserId] = otherUserEmbedding
+                if not all(v == 0 for v in otherUserEmbedding):
+                    otherUsersEmbeddings[otherUserId] = otherUserEmbedding
+    print("\n", otherUsersEmbeddings, "\n")
     otherUsersEmbeddingSimilarityScores = {}
     for id, embedding in otherUsersEmbeddings.items():
-        cos_sim = dot(user_embedding, embedding)/(norm(user_embedding)*norm(embedding))
-        otherUsersEmbeddingSimilarityScores[id] = abs(cos_sim)
+        cos_sim = dot(user_embedding, embedding)/(norm(embedding)*norm(user_embedding))
+        otherUsersEmbeddingSimilarityScores[id] = cos_sim
+    print("other users embedding sim scores: ", otherUsersEmbeddingSimilarityScores, "\n")
+    justToPrint = {}
+    for u, score in otherUsersEmbeddingSimilarityScores.items():
+        userName = getUserNameFromId(u)
+        justToPrint[userName] = score
+    print("other users: ", justToPrint, "\n")
     if len(otherUsersEmbeddings) != 0:
-        bestUserId = max(otherUsersEmbeddingSimilarityScores)
+        # print("other users recommendations: ", otherUsersEmbeddingSimilarityScores, '\n')
+        bestUserId = max(otherUsersEmbeddingSimilarityScores, key=otherUsersEmbeddingSimilarityScores.get)
         bestUser = getUserNameFromId(bestUserId)
         print("The profile that seems the most similar to your profile is: ", bestUser, '\n')
         timeToRecommendUser = time.time() - start_time
     else:
         print("Sorry, it seems that there are no users that are similar to you.")
-    
+
 print("""
       Stats: 
       Time to project graph: %s
