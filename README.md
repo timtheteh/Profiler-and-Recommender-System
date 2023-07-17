@@ -1,4 +1,4 @@
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2aa59cbf-bb96-4b5e-8d57-b6aa18cf6398)# Profiler and Recommender System
+# Profiler and Recommender System
 
 ### What is the goal of this project?
 
@@ -186,8 +186,6 @@ Recommended user to '127.0.0.1': '10.0.0.1' (Correct)
 
 **CASE 2:** Number of documents = 10, Users = 7, Classes, Unweighted (Weight = 0)
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b1943607-89e8-4dd2-9f63-91886f2b096c)
-
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4a106138-1568-4d5b-aa9e-43610e2dfb72)
 
 Recommended user to '127.0.0.1': '12.0.0.1' (Incorrect)
 
