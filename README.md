@@ -166,7 +166,8 @@ In conclusion, weighted connections and the inclusion of generic class nodes do 
 
 # Testing and Results for User Recommendations 
 
-### Test 1: Weighted vs Unweighted vs All same weight
+### Test 1: How does the weight of the links affect which user is recommended to the target user?
+### Result: Weighted gives the most accurate answer.
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/4dc93b83-bdc6-43cf-947e-2707f81a3f94)
 
@@ -196,7 +197,8 @@ Recommended user to '127.0.0.1': '11.0.0.1' (Incorrect)
 ### Analysis 
 Only the weighted case gave the right expected answer. 
 
-### Classes vs No Classes
+### Test 2: How does the inclusion of "Class" nodes affect which user gets recommended to the target user?
+
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/db4d360a-0c30-4ce4-a851-da7e1c141403)
 
 **CASE 4:** Number of documents = 10, Users = 5, Weighted, Classes
