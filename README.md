@@ -54,7 +54,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
   - The inbuilt personalised pagerank algoritm in Neo4j is then run based on these source nodes as bias.
   - Nodes with 'Document' label will be filtered and the top N documents will be recommended to the user.
 - **User Recommendation**
-  - For now, each node in the graph will have a node embedding calculated for it using the inbuilt fastRP algorithm in Neo4j.
+  - For now, each node in the graph will have a node embedding calculated for it using the inbuilt node2vec algorithm in Neo4j. (https://neo4j.com/docs/graph-data-science/current/machine-learning/node-embeddings/node2vec/)
   - Nodes with 'User' label apart from the user in question will be recommended as the most similar users to be recommended (similar interests).
 
 # Testing and Results for Document Recommendations
@@ -194,11 +194,9 @@ Recommended user to '127.0.0.1': '12.0.0.1' (Incorrect)
 Recommended user to '127.0.0.1': '11.0.0.1' (Incorrect)
 
 ### Analysis 
-- In the weighted and the same weight case, the correct user (11.0.0.1) is recommended to the user.
-- The result is only incorrect when the weights are all 0.
-- The durations to project graph, assign embeddings to graph and utimately give a user recommendation are all slightly slower in the weighted case vs the same weight case.
+Only the weighted case gave the right expected answer. 
 
-### Classes vs No Classes (TO DO)
+### Classes vs No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/db4d360a-0c30-4ce4-a851-da7e1c141403)
 
 **CASE 4:** Number of documents = 10, Users = 5, Weighted, Classes
