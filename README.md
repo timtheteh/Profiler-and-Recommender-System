@@ -44,8 +44,6 @@ Other features:
 
 ### Methodology
 
-**Solution**
-
 To improve the results of the personalised pagerank algorithm, the graph database is manipulated:
 1. User profiles in the graph database are enhanced by connecting users to the entities they searched for.
 2. Each relationship in the graph is weighted. In particular, the 'LIKES' relationship between users and their entities are constantly updated based on the frequency of the query, and the recency of the query. 
@@ -97,8 +95,8 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 
 # Testing and Results for Document Recommendations
 
-### Test 1: Do weights improve the document recommendation?
-### Result: Yes, weighted links improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
+## Test 1: Do weights improve the document recommendation?
+## Result: Yes, weighted links improve the correctness of the recommendation by forming a basis for the source nodes in personalised pagerank.
 
 **CASE 1 & CASE 2:**
 
