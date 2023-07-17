@@ -5,6 +5,21 @@
 1. To find a way to profile users based on their search inputs.
 2. To find a way to improve the personalised pagerank algorithm results in Neo4j
 
+### Results
+
+1. Weighed links -> Correctness of recommendation for both recommendation of document and user.
+2. Class nodes -> More robust ranking of recommendations for documents, as well as correctness of recommendation for user
+
+Other features:
+- Application is flexible to spelling mistakes (for eg. a user mispells 'apple' as 'aple' and assuming 'apple' already exists in the graph database. 'aple' will first be compared to 'apple' via semantic comparison of their respective vectors. If the comparison score is higher than a certain threshold, it will be assumed that the user meant 'apple' instead of 'apel', and a connection between the user and the existing 'apple' node will be formed. Otherwise, a new node 'apel' will be formed.
+
+### Limitations
+
+1. The main limitation of this application so far is that the extraction of entities is done with the help of LLMs (vicuna-7b). LLMs help with more robust entity extractions, but the entities extracted may be unpredictable at times.
+2. The way in which the 'HAS' relationship between documents and their intrinsic entities is also unknown at this point.
+3. In addition, the way in which the 'IS_SIMILAR_TO' relationship between document entities and the class nodes is also unknown at this point.
+4. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase, though not as 
+
 ### Methodology
 
 **Solution**
