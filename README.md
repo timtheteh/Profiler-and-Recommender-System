@@ -24,6 +24,7 @@ Other features:
 ### Methodology
 
 **Solution**
+
 To improve the results of the personalised pagerank algorithm, the graph database is manipulated:
 1. User profiles in the graph database are enhanced by connecting users to the entities they searched for.
 2. Each relationship in the graph is weighted. In particular, the 'LIKES' relationship between users and their entities are constantly updated based on the frequency of the query, and the recency of the query. 
