@@ -5,6 +5,13 @@
 1. To find a way to profile users based on their search inputs.
 2. To find a way to improve the personalised pagerank algorithm results in Neo4j
 
+### Introduction of Graph Database
+
+- Entities: words of phrases that are present in user searches / documents
+- Users: they are identified by their ip address in this demo
+- Documents: they can represent mindef articles
+- Classes: generic nodes which link entities together (for eg. 'Locations' <- choa chu kang, seletar, etc)
+
 ### Results
 
 1. Weighed links -> Correctness of recommendation for both recommendation of document and user.
@@ -20,6 +27,11 @@ Other features:
 2. The way in which the 'HAS' relationship between documents and their intrinsic entities is also unknown at this point. In addition, the way in which the 'IS_SIMILAR_TO' relationship between document entities and the class nodes is also unknown at this point.
 3. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase.
     - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
+  
+### Future work
+
+1. Documents: they can represent anything you want to recommend to the user (articles, web links, etc)
+2. Links between documents and their entities: these entities may not need to be extracted based on its contents, it can be likes hashtags (descriptions) that users can choose for the document before adding them into the database
 
 ### Methodology
 
