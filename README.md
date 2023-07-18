@@ -154,7 +154,7 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 
 **ORDER:**
 
-**SAME:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
+**Same:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
 
 **CASE 4:** Documents = 20, Weighted, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
