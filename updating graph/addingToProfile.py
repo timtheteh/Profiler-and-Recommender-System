@@ -9,13 +9,14 @@ import fasttext
 import datetime
 import massUpdateLikesWeights
 import string 
+import massPrune
 
 ### Databases ###
 # Elastic Search -> where logs are retrieved
 es_url = "https://localhost:9200"
 index="test2"
 es_username = "elastic"
-es_password = "n*9jIwl3jw8ryhQhlmX0"
+es_password = "7X5qA7Wio3T9t7Zq-A-w"
 # Neo4j graph database
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
@@ -78,7 +79,7 @@ filename = os.path.join(LOGDIR, f"{file_path}")
 def get_new_documents_user_inputs(timestamp):
     """Gets all documents in the index that were indexed after the specified document ID."""
     query = {
-        "size": 20,
+        "size": 200,
         "query": {
             "bool": {
                 "must": [
@@ -102,6 +103,7 @@ def get_new_documents_user_inputs(timestamp):
     datetime_list = []
 
     documents = response_dict['hits']['hits']
+
     if documents:
         for doc in documents:
             messages = doc['_source']['state']['messages']
@@ -190,6 +192,11 @@ def createPrompt(text):
         “entities”: ["Turtle"]
     }
 
+    Q: Extract the entity or entities in this question in JSON format: "What are paces?".
+    A: {
+        “entities”: ["Paces"]
+    }
+
     Q: Extract the entity or entities in this question in JSON format: "%s".
     A: 
     """%(text)
@@ -198,11 +205,16 @@ def createPrompt(text):
 ### Node Creations ####
 # node with 'User' label is created. Its only property is its name
 # In our demo case, the name is the user's ip address eg. '127.0.0.1'
-def create_user_node(node_name):
+def create_user_node(node_name, datetimeadded):
     with graphDB.session() as session:
-        session.run("MERGE (n:User {name: $name}) RETURN n", parameters = {
-                "name": node_name,
-            })
+        session.run("""
+        MERGE (n:User {name: $name}) 
+        SET n.datetimeadded = $datetimeadded
+        RETURN n
+        """, parameters = {
+            "name": node_name,
+            "datetimeadded": datetimeadded
+        })
 
 def create_entity_node(entity_name, vector, datetime):
     with graphDB.session() as session:
@@ -635,10 +647,13 @@ if user_queries:
     print("entities are here: ", entities)
     for entity, entity_properties in entities.items():
         freq, rec, user, dateaddedorupdated = entity_properties[0], entity_properties[1], entity_properties[2], entity_properties[3]
-        create_user_node(user) #creates a user node only if it does not already exist
+        create_user_node(user, datetimeadded=dateaddedorupdated) #creates a user node only if it does not already exist
         conditionally_add_entity_node(entity_name=entity, user_name=user, freq=freq, rec=rec, threshold=threshold_for_similarity, dateaddedorupdated=dateaddedorupdated)
 else:
     print("No new user queries!")
 # # after adding entities, do one run of mass update of relationships
 x = massUpdateLikesWeights.massUpdate()
 x.massUpdateGraphLikesRelationships()
+
+y = massPrune.massPrune()
+y.massPruneGraph()
