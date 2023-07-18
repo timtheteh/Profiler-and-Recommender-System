@@ -34,7 +34,7 @@ Other features:
 1. The main limitation of this application so far is that the extraction of entities is done with the help of LLMs (vicuna-7b). LLMs help with more robust entity extractions, but the entities extracted may be unpredictable at times.
 2. The way in which the 'HAS' relationship between documents and their intrinsic entities is also unknown at this point. In addition, the way in which the 'IS_SIMILAR_TO' relationship between document entities and the class nodes is also unknown at this point.
 3. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase.
-    - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
+    - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time (see massPrune.py)
 4. Accuracy of which user is recommended to the target user needs more investigation as the answer is not consistent all the time (need to test other parameters in the algorithm, for example randomSeed, embeddingDimension, etc)
    - Maybe can use pagerank instead of node embeddings to recommend users?
   
@@ -65,7 +65,7 @@ To improve the results of the personalised pagerank algorithm, the graph databas
   - These entities are also assigned to their predefined 'Class' nodes (via a 'IS_SIMILAR_TO' relationship. Likewise, the weight of each 'IS_SIMILAR_TO' relationship is randomly assigned between 0.3 and 0.9.
 
 **Step 2: Logging and Adding Entities to Enhance a User's Profile**
-- Files: loggingToES.py, addingToProfile.py
+- Files: loggingToES.py, addingToProfile.py, massUpdateLikesWeights.py, massPrune.py
 - **loggingToES**:
   - User's search inputs are logged into Elastic Search (batch queries)
   - These logs contain information about who is the user, what did they search for, the datetime of their query, just to name a few
@@ -82,6 +82,13 @@ To improve the results of the personalised pagerank algorithm, the graph databas
     - 'LIKES' Relationship: freq, rec, weight
     - 'IS_SIMILAR_TO' Relationship: weight
   - At the end of each addition to the graph, each link's recency and weight properties in the graph is again updated.
+- **massUpdateLikesWeights.py**
+    - whenever this function is called, the weights of each "LIKES" relationship is updated
+    - mainly, the frequency and recency properties of each "LIKES" relationship is updated, and consequently the weight of each "LIKES" relationship is updated     
+    - beyond a certain shelf-life, the frequency of a "LIKES" relationship will be set to zero -> and hence the weight will be set to zero
+- **massPrune.py**
+    - this function looks through the whole graph and deletes entities, users, documents and all their respective links if the shelf-life of these nodes and links are exceeded
+    - The purpose of this function is to keep the size of the graph as small as needed. 
 
 **Step 3: Recommendation**
 - File: recommendation.py
@@ -323,14 +330,10 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 - However, the time complexity in Case 7 is significantly longer, especially when the nodes are assigned the embedding vectors.
 - Hence, to avoid long runtimes, the graph database should be pruned periodically.
 
-# Bonus Feature 1: Choosing which user to recommend a document to
+# Bonus Feature: Choosing which user to recommend a document to
 
 Reusing the same test case above (test case 7):
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/0e7ff58c-5d37-46ff-9b43-21035a80e826)
 
 The correct user is chosen to recommend document 22 to: 127.0.0.1.
-
-# Bonus Feature 2: Periodic Pruning of Graph Database
-
-
