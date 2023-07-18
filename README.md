@@ -275,7 +275,7 @@ Best user recommended: 14.0.0.1 (consistently wrong)
 
 ## Analysis 
 
-The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistently the case. The reason is that the node embeddings change with time as the weights change (because the recency changes). However, this is still a better case than Case 5, where the user recommended is consistly wrong. 
+The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistently the case. The reason is that the node embeddings change with time as the weights change (because the recency changes). However, this is still a better case than Case 5, where the user recommended is consistently wrong. 
 
 # Testing how does the size of the graph affect the recommendation of documents and users.
 
