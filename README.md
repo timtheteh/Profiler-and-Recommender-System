@@ -36,6 +36,7 @@ Other features:
 3. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase.
     - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
 4. Accuracy of which user is recommended to the target user needs more investigation as the answer is not consistent all the time (need to test other parameters in the algorithm, for example randomSeed, embeddingDimension, etc)
+   - Maybe can use pagerank instead of node embeddings to recommend users?
   
 ### Future work
 
@@ -295,15 +296,32 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 
 **CASE 7:** Number of documents = 100, Users = 5, Weighted, Classes
 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/578ddc2f-adb6-419f-8571-7cd211856cba)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74441f6e-af47-42d7-828e-b26bbe1b6e06)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/74a90207-57c8-42a9-bbb1-81d78bed8038)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/fdb084cb-81f9-4441-96f1-592a84e89b2a)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d0ecea8e-32d6-47da-a821-369fe2867082)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/b1f7fc7d-869e-4d53-b452-9817fc281f28)
+
+- User '127.0.0.1' likes 'Locations' and 'Document 22' alot: [clementi 5 times, keat hong camp 5 times, cmpb 5 times, orchard 5 times]
+- User '10.0.0.1' also likes 'Locations' alot: [orchard 5 times, orchard road 5 times, gleneagles 5 times, jurong island 5 times]
+- User '11.0.0.1' likes same things as '10.0.0.1' but less strongly: [orchard 1 time, orchard road 1 time, gleneagles 1 time, jurong island 1 time]
+- User '12.0.0.1' also likes 'Locations', but only decently: [tekong island 3 times, geylang 3 times]
+- User '13.0.0.1' also likes 'Locations', but only decently: [tuas 1 time, ecp 1 time, gombak 1 time]
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/dcad1cd4-8aa0-411d-bd0e-4618297470d5)
+
+**Recommended document:** Document 22 (Correct)
+
+**Recommended user:** User 10.0.0.1 (quite consistently correct)
+
+**Time to project graph:** 40ms
+
+**Time to recommend document:** 35ms
+
+**Time to assign node embeddings:** 1102ms
+
+**Time to recommend another user:** 5ms
 
 ## Analysis 
-- In both cases (5 documents vs 100 documents), the user recommendation is correct (11.0.0.1).
-- However, the durations to project the graph, to assign the graph embeddings and to ultimately recommend a user were all longer in the case where there was 100 documents vs 5 documents.
+- In both cases (10 documents vs 100 documents), the document recommendation (document 2 in case 6, document 22 in case 7) and the user recommendation are correct (10.0.0.1).
+- However, the time complexity in Case 7 is significantly longer, especially when the nodes are assigned the embedding vectors.
+- Hence, to avoid long runtimes, the graph database should be pruned periodically.
 
 # Bonus Feature 1: Choosing which user to recommend a document to
 
