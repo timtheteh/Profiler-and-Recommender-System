@@ -35,6 +35,7 @@ Other features:
 2. The way in which the 'HAS' relationship between documents and their intrinsic entities is also unknown at this point. In addition, the way in which the 'IS_SIMILAR_TO' relationship between document entities and the class nodes is also unknown at this point.
 3. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase.
     - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
+4. Accuracy of which user is recommended to the target user needs more investigation as the answer is not consistent all the time. 
   
 ### Future work
 
@@ -269,9 +270,25 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 ## Result: It does not affect the accuracy of the recommendation, but it does increase the time complexity.
 
 **CASE 6:** Number of documents = 10, Users = 5, Weighted, Classes
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/c61b4d25-a685-4836-ab0a-99cbd611d7c4)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2bc66953-2b21-4e32-baa7-32c78cf84fee)
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/581f6930-2c49-4a61-9781-fea3dce9ad1b)
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/2956750b-0fdb-4fc2-b0cc-d01e7751a81c)
+
+- User '127.0.0.1' likes 'Locations' and 'Document 2' alot: [jurong 5 times, tekong 5 times, tekong island 5 times, jurong camp 5 times]
+- User '10.0.0.1' also likes 'Locations' alot: [ecp 5 times, changi bay 5 times, bukit timah 5 times, orchard 5 times]
+- User '11.0.0.1' likes same things as '10.0.0.1' but less strongly: [ecp 1 time, changi bay 1 time, bukit timah 1 time, orchard 1 time]
+- User '12.0.0.1' also likes 'Locations', but only decently: [changi 3 times, kallang 3 times]
+- User '13.0.0.1' also likes 'Locations', but only decently: [changi 1 time, kallang 1 time, ecp 1 time]
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/207b7d50-7651-4814-85c1-d26b25a85265)
+
+**Recommended document:** Document 2 (Correct)
+
+**Recommended user:** User 10.0.0.1 (quite consistently correct)
+
+**Time to project graph:** 24ms
+**Time to recommend document:** 12ms
+**Time to assign node embeddings:** 167ms
+**Time to recommend another user:** 3ms
 
 **CASE 7:** Number of documents = 100, Users = 5, Weighted, Classes
 
