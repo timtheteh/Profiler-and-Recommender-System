@@ -100,6 +100,10 @@ To improve the results of the personalised pagerank algorithm, the graph databas
 - **User Recommendation**
   - For now, each node in the graph will have a node embedding calculated for it using the inbuilt node2vec algorithm in Neo4j. (https://neo4j.com/docs/graph-data-science/current/machine-learning/node-embeddings/node2vec/)
   - Nodes with 'User' label apart from the user in question will be recommended as the most similar users to be recommended (similar interests).
+- **Choosing which user to recommend a document to**
+  - Source nodes: entities of documents
+  - Run pagerank to get pagerank score of each node
+  - The 'User' node with the highest pagerank score is chosen.
 
 # Testing and Results for Document Recommendations
 
