@@ -35,7 +35,7 @@ Other features:
 2. The way in which the 'HAS' relationship between documents and their intrinsic entities is also unknown at this point. In addition, the way in which the 'IS_SIMILAR_TO' relationship between document entities and the class nodes is also unknown at this point.
 3. When the graph becomes larger and larger, the time complexity of this application increases. This is mainly because in order to run the personalised pagerank and node embedding algorithms, a projection of the graph database needs to be done which takes longer as the size of the graph increases. Furthermore, as the size increases, the time complexity of the pagerank and node embeddings increase.
     - This can be circumvented by implementing a periodic pruning of the graph, which will prune users, entities, documents and all the respective relationships after a set period of time
-4. Accuracy of which user is recommended to the target user needs more investigation as the answer is not consistent all the time. 
+4. Accuracy of which user is recommended to the target user needs more investigation as the answer is not consistent all the time (need to test other parameters in the algorithm, for example randomSeed, embeddingDimension, etc)
   
 ### Future work
 
