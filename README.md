@@ -325,5 +325,12 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 
 # Bonus Feature 1: Choosing which user to recommend a document to
 
+Reusing the same test case above (test case 7):
+
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/0e7ff58c-5d37-46ff-9b43-21035a80e826)
+
+The correct user is chosen to recommend document 22 to: 127.0.0.1.
+
 # Bonus Feature 2: Periodic Pruning of Graph Database
+
 
