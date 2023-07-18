@@ -77,6 +77,21 @@ def getDocumentEntities(doc_name):
             list_ids.append(record['ent.name'])
         return list_ids
 
+def getUserEntities(user_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (user:User {name: $user_name})
+        MATCH (user)-[r1:LIKES]-(ent:Entity)
+        RETURN ent.name
+        """, parameters={
+            "user_name": user_name
+        })
+        records = result.data()
+        list_ids = []
+        for record in records:
+            list_ids.append(record['ent.name'])
+        return list_ids
+
 def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecommend):
     with graphDB.session() as session:
         result = session.run(           
@@ -108,6 +123,38 @@ def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecom
         print('number of relevant results: ', len(relevant_records), '\n')
         print('relevant results: ', relevant_records, '\n')
         print('recommendations are: ', recommendations, '\n')
+        if recommendations[list(recommendations.keys())[0]][1] != 0.0:
+            return recommendations[list(recommendations.keys())[0]][0]
+        else:
+            return None
+
+def personalisedPageRankDocToUser(doc_name, graph_name, dampingFactor, typeOfNodeToRecommend):
+    with graphDB.session() as session:
+        result = session.run(           
+        """
+        MATCH (d:Document {name: $doc_name})
+        CALL gds.pageRank.stream($graph_name, {
+            maxIterations: 20,
+            dampingFactor: $dampingFactor,
+            sourceNodes: $sourceNodes,
+            relationshipWeightProperty: 'weight'
+        })
+        YIELD nodeId, score
+        RETURN gds.util.asNode(nodeId).name AS name, labels(gds.util.asNode(nodeId)) AS label, score, nodeId
+        ORDER BY score DESC, name ASC
+        """, graph_name=graph_name, doc_name=doc_name, sourceNodes=sourceNodes, dampingFactor=dampingFactor)
+        
+        records = result.data()
+        print('list of all records: ', records, '\n')
+        relevant_records = {}
+        recommendations = {}
+        total_score = 0
+        for record in records:
+            total_score += record['score']
+            if record['score'] > 0:
+                relevant_records[record['nodeId']] = [record['name'], record['label'], record['score']]
+            if record['label'][0] == typeOfNodeToRecommend:
+                recommendations[record['nodeId']] = [record['name'], record['score']]
         if recommendations[list(recommendations.keys())[0]][1] != 0.0:
             return recommendations[list(recommendations.keys())[0]][0]
         else:
@@ -177,8 +224,6 @@ def assignGraphEmbeddings(graphName):
         CALL gds.beta.node2vec.stream(
             $graphName,
             {
-                embeddingDimension: 4,
-                randomSeed: 42,
                 relationshipWeightProperty: 'weight'
             }
         )
@@ -271,12 +316,12 @@ else:
                 otherUserEmbedding = j['embedding']
                 if not all(v == 0 for v in otherUserEmbedding):
                     otherUsersEmbeddings[otherUserId] = otherUserEmbedding
-    print("\n", otherUsersEmbeddings, "\n")
+    # print("\n", otherUsersEmbeddings, "\n")
     otherUsersEmbeddingSimilarityScores = {}
     for id, embedding in otherUsersEmbeddings.items():
         cos_sim = dot(user_embedding, embedding)/(norm(embedding)*norm(user_embedding))
         otherUsersEmbeddingSimilarityScores[id] = cos_sim
-    print("other users embedding sim scores: ", otherUsersEmbeddingSimilarityScores, "\n")
+    # print("other users embedding sim scores: ", otherUsersEmbeddingSimilarityScores, "\n")
     justToPrint = {}
     for u, score in otherUsersEmbeddingSimilarityScores.items():
         userName = getUserNameFromId(u)
@@ -291,10 +336,24 @@ else:
     else:
         print("Sorry, it seems that there are no users that are similar to you.")
 
+### Choose which user to show document to ###
+new_document = "document 22"
+source_nodes2 = getDocumentEntities(doc_name=new_document)
+print(source_nodes2, '\n')
+start_time = time.time()
+recommendedUser = personalisedPageRankDocToUser(doc_name=new_document, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='User')
+timeToRecommendUser = time.time() - start_time
+if recommendedUser:
+    userEntities = getUserEntities(recommendedUser)
+    print("The best user to show ", new_document, " to is: ", recommendedUser, ". This user likes the following overlapping entities: ", userEntities, ".\n")
+else:
+    print("Sorry, it seems like there is no appropriate user to show ", new_document, " to.\n")
+
 print("""
       Stats: 
       Time to project graph: %s
       Time to recommend graph: %s
       Time to assign embeddings to graph: %s
       Time to recommend another user: %s
-      """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser))
+      Time to choose user to recommend document to: %s
+      """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser, timeToRecommendUser))
