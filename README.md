@@ -42,7 +42,7 @@ Other features:
 
 1. Documents: they can represent anything you want to recommend to the user (articles, web links, etc)
 2. Links between documents and their entities: these entities may not need to be extracted based on its contents, it can be likes hashtags (descriptions) that users can choose for the document before adding them into the database
-3. Logging metrics of user feedback of LLM answers and recommendations.
+3. Right now we are recommending based on user inputs. But in the future, we can also tailor the recommendation based on user feedback of the recommendations. Hence in the future, we can log metrics of user feedback of LLM answers and recommendations and use these feedback to tailor the recommendation further.
 
 ### Methodology
 
