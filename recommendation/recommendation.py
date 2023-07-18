@@ -357,3 +357,4 @@ print("""
       Time to recommend another user: %s
       Time to choose user to recommend document to: %s
       """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser, timeToRecommendUser))
+
