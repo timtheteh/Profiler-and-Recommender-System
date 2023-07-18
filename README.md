@@ -42,7 +42,6 @@ Other features:
 
 1. Documents: they can represent anything you want to recommend to the user (articles, web links, etc)
 2. Links between documents and their entities: these entities may not need to be extracted based on its contents, it can be likes hashtags (descriptions) that users can choose for the document before adding them into the database
-3. Recommending new documents to relevant users only
 
 ### Methodology
 
