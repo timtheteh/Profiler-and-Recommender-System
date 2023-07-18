@@ -286,8 +286,11 @@ The user recommended to 127.0.0.1 is correct in Case 4, but it is not consistent
 **Recommended user:** User 10.0.0.1 (quite consistently correct)
 
 **Time to project graph:** 24ms
+
 **Time to recommend document:** 12ms
+
 **Time to assign node embeddings:** 167ms
+
 **Time to recommend another user:** 3ms
 
 **CASE 7:** Number of documents = 100, Users = 5, Weighted, Classes
