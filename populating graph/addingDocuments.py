@@ -42,11 +42,16 @@ for chunk in whiteListChunks:
     count+=1
 predefined_classes['Locations'] = locations
 
-def create_document_node(doc_name):
+def create_document_node(doc_name, datetimeadded):
     with graphDB.session() as session:
-        session.run("MERGE (n:Document {name: $name}) RETURN n", parameters = {
-                "name": doc_name,
-            })
+        session.run("""
+        MERGE (n:Document {name: $name}) 
+        SET n.datetimeadded = $datetimeadded
+        RETURN n
+        """, parameters = {
+            "name": doc_name,
+            "datetimeadded": datetimeadded
+        })
 
 def create_link_document_entity(doc_name, entity_name, weight):
     with graphDB.session() as session:
@@ -142,7 +147,7 @@ def create_link_entity_class(entity_name, most_similar_class_name, most_similar_
         })
 
 list_vicuna_answers = []
-for i in range(20):
+for i in range(10):
     try:
         random_keywords = get_random_keywords(5)
         print("random keywords are here: ", random_keywords)
@@ -199,8 +204,8 @@ for textName, textContent in list_of_texts.items():
 print("Document names and their entities: ", textName_entities, '\n')
 
 for document, entity_list in textName_entities.items():
-    create_document_node(document) 
     now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+    create_document_node(document, datetimeadded=now)
     for entity in entity_list:
         entity = entity.lower()
         entityVector = sentence2vecModel.get_sentence_vector(entity)
