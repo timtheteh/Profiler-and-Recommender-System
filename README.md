@@ -147,7 +147,7 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 - Documents which have more 'locations' entities:
   - Documents 3, 14, 7, 2, 4, 1
 - User '127.0.0.1' (likes mainly 'locations'):
-  - [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2]
+  - [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2] did not search for document 7
 
 **CASE 3:** Documents = 20, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a5c2f2c2-d79d-44f6-9a0d-ead92aa444e6)
