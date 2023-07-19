@@ -77,6 +77,21 @@ def getDocumentEntities(doc_name):
             list_ids.append(record['ent.name'])
         return list_ids
 
+def getDocumentEntityIds(doc_name):
+    with graphDB.session() as session:
+        result = session.run("""
+        MATCH (user:Document {name: $doc_name})
+        MATCH (user)-[r1:HAS]-(ent:Entity)
+        RETURN id(ent), ent.name
+        """, parameters={
+            "doc_name": doc_name
+        })
+        records = result.data()
+        list_ids = []
+        for record in records:
+            list_ids.append(record['id(ent)'])
+        return list_ids
+
 def getUserEntities(user_name):
     with graphDB.session() as session:
         result = session.run("""
@@ -128,7 +143,7 @@ def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecom
         else:
             return None
 
-def personalisedPageRankDocToUser(doc_name, graph_name, dampingFactor, typeOfNodeToRecommend):
+def personalisedPageRankDocToUser(doc_name, graph_name, dampingFactor, typeOfNodeToRecommend, sourceNodes):
     with graphDB.session() as session:
         result = session.run(           
         """
@@ -337,12 +352,12 @@ else:
         print("Sorry, it seems that there are no users that are similar to you.")
 
 ### Choose which user to show document to ###
-new_document = "document 22"
-source_nodes2 = getDocumentEntities(doc_name=new_document)
+new_document = "document 6"
+source_nodes2 = getDocumentEntityIds(doc_name=new_document)
 print(source_nodes2, '\n')
 start_time = time.time()
-recommendedUser = personalisedPageRankDocToUser(doc_name=new_document, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='User')
-timeToRecommendUser = time.time() - start_time
+recommendedUser = personalisedPageRankDocToUser(doc_name=new_document, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='User', sourceNodes=source_nodes2)
+timeToRecommendAnotherUser = time.time() - start_time
 if recommendedUser:
     userEntities = getUserEntities(recommendedUser)
     print("The best user to show ", new_document, " to is: ", recommendedUser, ". This user likes the following overlapping entities: ", userEntities, ".\n")
@@ -356,5 +371,5 @@ print("""
       Time to assign embeddings to graph: %s
       Time to recommend another user: %s
       Time to choose user to recommend document to: %s
-      """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser, timeToRecommendUser))
+      """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser, timeToRecommendAnotherUser))
 
