@@ -35,7 +35,7 @@ graphDB = neo4j.GraphDatabase.driver("bolt://localhost:7687", auth=(f"{dbms_user
 # Parameter 1 (for LLM): LLM temperature -> higher means more variation in answer, set to 0 for most consistent results
 vicuna_temperature = 0
 # Parameter 2 (to see if entity in question is similar to any existing nodes): change this to have less new nodes in graph. lower -> less new nodes
-threshold_for_similarity = 0.65
+threshold_for_similarity = 0.9
 # Parameter 3 (for weights of LIKES relationship): change this to have gradual/drastic changes in probability of weights
 probability_rate = 0.9
 # Parameter 4 (to see if entity in question is similar to any class nodes) change this to have node point to more classes
@@ -545,12 +545,14 @@ def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, 
                         continue
                 # Create link between entity and class via cosine similarity
                 most_similar_class_nodes = get_most_similar_class_nodes(entity_name=entity_name)
-                best_class_node = list(most_similar_class_nodes)[0]
-                best_class_node_score = list(most_similar_class_nodes.values())[0]
-                create_link_entity_class(entity_name=entity_name, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
-                for class_node, score in most_similar_class_nodes.items():
-                    if score > class_threshold:
-                        create_link_entity_class(entity_name=entity_name, most_similar_class_name=class_node, most_similar_class_score=score)
+                best_class_node, best_class_node_score = None, None
+                if len(most_similar_class_nodes) > 0:
+                    best_class_node = list(most_similar_class_nodes)[0]
+                    best_class_node_score = list(most_similar_class_nodes.values())[0]
+                    create_link_entity_class(entity_name=entity_name, most_similar_class_name=best_class_node, most_similar_class_score=best_class_node_score)
+                    for class_node, score in most_similar_class_nodes.items():
+                        if score > class_threshold:
+                            create_link_entity_class(entity_name=entity_name, most_similar_class_name=class_node, most_similar_class_score=score)
             else:
                 ### Test Case 4 ###
                 if check_existence_relationship(user_name=user_name, entity_name=most_similar_node_name):
@@ -1002,17 +1004,21 @@ def addToProfile():
                 entities[ent] = [freq, rec, user_ip_address, datetime_from_query]
         print("entities are here: ", entities)
         for entity, entity_properties in entities.items():
+            print("the entity i am adding is: ", entity)
             freq, rec, user, dateaddedorupdated = entity_properties[0], entity_properties[1], entity_properties[2], entity_properties[3]
             create_user_node(user, datetimeadded=dateaddedorupdated) #creates a user node only if it does not already exist
             conditionally_add_entity_node(entity_name=entity, user_name=user, freq=freq, rec=rec, threshold=threshold_for_similarity, dateaddedorupdated=dateaddedorupdated)
+            print('i have done the adding')
     else:
         print("No new user queries!")
     # # after adding entities, do one run of mass update of relationships
     x = massUpdateLikesWeights.massUpdate()
     x.massUpdateGraphLikesRelationships()
 
-    y = massPrune.massPrune()
-    y.massPruneGraph()
+    # y = massPrune.massPrune()
+    # y.massPruneGraph()
+
+    return 'hi'
 
 @app.route('/recommendDocumentandUser', methods=['GET'])
 def recommendDocument():
