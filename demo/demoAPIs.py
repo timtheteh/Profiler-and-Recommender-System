@@ -889,6 +889,18 @@ def getDocumentContents(doc_name):
         record = result.single()
         return record['d.content']
 
+def getAllDocuments():
+    doc_names_list = []
+    with graphDB.session() as session:
+        result = session.run("""
+            MATCH (d:Document)
+            RETURN d.name
+            """)
+        records = result.data()
+        for record in records:
+            doc_name = record['d.name']
+            doc_names_list.append(doc_name)
+        return doc_names_list
 
 ##########################################################################################################################
 #### Driver code ####
@@ -1061,27 +1073,6 @@ def recommendDocument():
         else:
             print("Sorry, it seems that there are no users that are similar to you.")
 
-    # # ### Choose which user to show document to ###
-    # # new_document = "document 6"
-    # # source_nodes2 = getDocumentEntityIds(doc_name=new_document)
-    # # print(source_nodes2, '\n')
-    # # start_time = time.time()
-    # # recommendedUser = personalisedPageRankDocToUser(doc_name=new_document, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='User', sourceNodes=source_nodes2)
-    # # timeToRecommendAnotherUser = time.time() - start_time
-    # # if recommendedUser:
-    # #     userEntities = getUserEntities(recommendedUser)
-    # #     print("The best user to show ", new_document, " to is: ", recommendedUser, ". This user likes the following overlapping entities: ", userEntities, ".\n")
-    # # else:
-    # #     print("Sorry, it seems like there is no appropriate user to show ", new_document, " to.\n")
-
-    # print("""
-    #     Stats: 
-    #     Time to project graph: %s
-    #     Time to recommend graph: %s
-    #     Time to assign embeddings to graph: %s
-    #     Time to recommend another user: %s
-    #     """%(timeToProjectGraph, timeToRecommendDocument, timeToAssignEmbeddings, timeToRecommendUser))
-
     document_contents = getDocumentContents(recommendedDocument)
     
     if recommendedDocument and bestUser:
@@ -1100,7 +1091,21 @@ def recommendDocument():
         
         Here are the contents of the document:
         """%(recommendedDocument, document_contents)
-    # return 'hi'
+
+@app.route('/chooseBestUserToRecNewDocTo', methods=['GET'])
+def chooseUserToRecommendNewDocumentTo():
+    ### Choose which user to show document to ###
+    new_document = request.data.decode("utf-8")
+    source_nodes2 = getDocumentEntityIds(doc_name=new_document)
+    print(source_nodes2, '\n')
+    recommendedUser = personalisedPageRankDocToUser(doc_name=new_document, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='User', sourceNodes=source_nodes2)
+    if recommendedUser:
+        userEntities = getUserEntities(recommendedUser)
+        print("The best user to show ", new_document, " to is: ", recommendedUser, ". This user likes the following overlapping entities: ", userEntities, ".\n")
+        return recommendedUser
+    else:
+        print("Sorry, it seems like there is no appropriate user to show ", new_document, " to.\n")
+        return "No User"
 
 if __name__ == '__main__':
     app.run(debug=True, port=8001)
