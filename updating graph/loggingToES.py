@@ -7,15 +7,16 @@ import schedule
 from fastchat.constants import LOGDIR
 import requests
 
+
 def get_conv_log_filename():
     t = datetime.datetime.now()
-    name = os.path.join(LOGDIR, f"{t.year}-{t.month:02d}-{t.day:02d}-conv.json")
+    name = os.path.join("/home/grace/grace/vicuna/FastChat/", f"{t.year}-{t.month:02d}-{t.day:02d}-conv.json")
     return name
 
 es_url = "https://localhost:9200"
 index="test2"
 username = "elastic"
-password = "n*9jIwl3jw8ryhQhlmX0"
+password = "63jFV0cEXUfJziJ0ZMxL"
 data_list = []
 
 def bulk_index_log_data():
