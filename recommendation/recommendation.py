@@ -107,7 +107,7 @@ def getUserEntities(user_name):
             list_ids.append(record['ent.name'])
         return list_ids
 
-def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecommend):
+def personalisedPageRank(user_name, graph_name, dampingFactor, typeOfNodeToRecommend, sourceNodes):
     with graphDB.session() as session:
         result = session.run(           
         """
