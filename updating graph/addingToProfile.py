@@ -16,7 +16,7 @@ import massPrune
 es_url = "https://localhost:9200"
 index="test2"
 es_username = "elastic"
-es_password = "7X5qA7Wio3T9t7Zq-A-w"
+es_password = "4J8L7gmQ4m0noHBINvFN"
 # Neo4j graph database
 dbms_username = "neo4j"
 dbms_password = "P@ssw0rd"
