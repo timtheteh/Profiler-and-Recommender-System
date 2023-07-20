@@ -40,15 +40,16 @@ predefined_classes['Locations'] = locations
 
 list_of_texts = {'document 6': 'The ITMS team used UHF radios to log the S-Net data from Fort Canning Reservoir.'}
 
-def create_document_node(doc_name, datetimeadded):
+def create_document_node(doc_name, datetimeadded, content):
     with graphDB.session() as session:
         session.run("""
         MERGE (n:Document {name: $name}) 
-        SET n.datetimeadded = $datetimeadded
+        SET n.datetimeadded = $datetimeadded, n.content=$content
         RETURN n
         """, parameters = {
             "name": doc_name,
-            "datetimeadded": datetimeadded
+            "datetimeadded": datetimeadded,
+            "content": content
         })
 
 def create_link_document_entity(doc_name, entity_name, weight):
@@ -93,34 +94,35 @@ def create_link_entity_class(entity_name, most_similar_class_name, most_similar_
 ## Driver code ###
 textName_entities = {}
 for textName, textContent in list_of_texts.items():
-    textName_entities[textName] = []
+    textName_entities[textName] = [textContent, []]
     textContent = textContent.lower()
     for phrase in whitelist:
         if (" "+phrase+" ") in textContent:
-            textName_entities[textName].append(phrase)
+            textName_entities[textName][1].append(phrase)
             continue
         elif (phrase+" ") in textContent and textContent.find(phrase) == 0:
-            textName_entities[textName].append(phrase)
+            textName_entities[textName][1].append(phrase)
             continue
         elif (phrase+" ") in textContent:
             for punctuation in punctuationList:
                 if (punctuation+phrase+" ") in textContent:
-                    textName_entities[textName].append(phrase)
+                    textName_entities[textName][1].append(phrase)
                     break
             continue
         elif (" "+phrase) in textContent and textContent.rfind(phrase)+len(phrase)-1 == len(textContent)-1:
-            textName_entities[textName].append(phrase)
+            textName_entities[textName][1].append(phrase)
             continue
         elif (" "+phrase) in textContent:
             for punctuation in punctuationList:
                 if (" "+phrase+punctuation) in textContent:
-                    textName_entities[textName].append(phrase)
+                    textName_entities[textName][1].append(phrase)
                     break
             continue
 
-for document, entity_list in textName_entities.items():
+for document, content_entity_list in textName_entities.items():
     now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-    create_document_node(document, datetimeadded=now)
+    create_document_node(document, datetimeadded=now, content=content_entity_list[0])
+    entity_list = content_entity_list[1]
     for entity in entity_list:
         entity = entity.lower()
         entityVector = sentence2vecModel.get_sentence_vector(entity)
