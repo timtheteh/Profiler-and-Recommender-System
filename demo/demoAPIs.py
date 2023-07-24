@@ -1,5 +1,6 @@
 import json
 import math
+import random
 from graphdatascience import GraphDataScience
 import requests
 import os
@@ -540,7 +541,8 @@ def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, 
                 # Create link between entity and class via predefined relationships if entity is in the predefined list
                 for predefined_class, list_of_entities in predefined_classes.items():
                     if entity_name in list_of_entities:
-                        create_link_entity_class(entity_name=entity_name, most_similar_class_name=predefined_class, most_similar_class_score=0.7)
+                        print("\nentity belongs to: ", predefined_class, '\n')
+                        create_link_entity_class(entity_name=entity_name, most_similar_class_name=predefined_class, most_similar_class_score=random.uniform(0.3, 0.9))
                     else:
                         continue
                 # Create link between entity and class via cosine similarity
@@ -574,7 +576,7 @@ def conditionally_add_entity_node(entity_name, user_name, freq, rec, threshold, 
                 print("hi i am here: ", predefined_class)
                 if entity_name in list_of_entities:
                     print('hi')
-                    create_link_entity_class(entity_name=entity_name, most_similar_class_name=predefined_class, most_similar_class_score=0.7)
+                    create_link_entity_class(entity_name=entity_name, most_similar_class_name=predefined_class, most_similar_class_score=random.uniform(0.3, 0.9))
                     print('bye')
                 else:
                     continue
@@ -937,58 +939,53 @@ def addToProfile():
             query = query.lower()
             entities_from_answer = []
             for phrase in whitelist:
-                if phrase not in entities_from_answer:
-                    if (phrase+" ") in query and query.find(phrase) == 0:
-                        entities_from_answer.append(phrase)
-                        continue
-                    elif (phrase+" ") in query:
-                        for punctuation in punctuationList:
-                            if (punctuation+phrase+" ") in query:
-                                entities_from_answer.append(phrase)
-                                break
-                        continue
-                    elif (" "+phrase) in query and query.rfind(phrase)+len(phrase)-1 == len(query)-1:
-                        entities_from_answer.append(phrase)
-                        continue
-                    elif (" "+phrase) in query:
-                        for punctuation in punctuationList:
-                            if (" "+phrase+punctuation) in query:
-                                entities_from_answer.append(phrase)
-                                break
-                        continue
-                    elif (" "+phrase+" ") in query:
-                        entities_from_answer.append(phrase)
-                        continue
-                else:
+                if (" "+phrase+" ") in query:
+                    entities_from_answer.append(phrase)
                     continue
-            
+                elif (phrase+" ") in query and query.find(phrase) == 0:
+                    entities_from_answer.append(phrase)
+                    continue
+                elif (phrase+" ") in query:
+                    for punctuation in punctuationList:
+                        if (punctuation+phrase+" ") in query:
+                            entities_from_answer.append(phrase)
+                            break
+                    continue
+                elif (" "+phrase) in query and query.rfind(phrase)+len(phrase)-1 == len(query)-1:
+                    entities_from_answer.append(phrase)
+                    continue
+                elif (" "+phrase) in query:
+                    for punctuation in punctuationList:
+                        if (" "+phrase+punctuation) in query:
+                            entities_from_answer.append(phrase)
+                            break
+                    continue
+                
             # Get SG locations from query using whitelist
             for loc in locations:
-                if loc not in entities_from_answer:
-                    if (loc+" ") in query and query.find(loc) == 0:
-                        entities_from_answer.append(loc)
-                        continue
-                    elif (loc+" ") in query:
-                        for punctuation in punctuationList:
-                            if (punctuation+loc+" ") in query:
-                                entities_from_answer.append(loc)
-                                break
-                        continue
-                    elif (" "+loc) in query and query.rfind(loc)+len(loc)-1 == len(query)-1:
-                        entities_from_answer.append(loc)
-                        continue
-                    elif (" "+loc) in query:
-                        for punctuation in punctuationList:
-                            if (" "+loc+punctuation) in query:
-                                entities_from_answer.append(loc)
-                                break
-                        continue
-                    elif (" "+loc+" ") in query:
-                        entities_from_answer.append(loc)
-                        continue
-                else:
+                if (" "+loc+" ") in query:
+                    entities_from_answer.append(loc)
                     continue
-            
+                elif (loc+" ") in query and query.find(loc) == 0:
+                    entities_from_answer.append(loc)
+                    continue
+                elif (loc+" ") in query:
+                    for punctuation in punctuationList:
+                        if (punctuation+loc+" ") in query:
+                            entities_from_answer.append(loc)
+                            break
+                    continue
+                elif (" "+loc) in query and query.rfind(loc)+len(loc)-1 == len(query)-1:
+                    entities_from_answer.append(loc)
+                    continue
+                elif (" "+loc) in query:
+                    for punctuation in punctuationList:
+                        if (" "+loc+punctuation) in query:
+                            entities_from_answer.append(loc)
+                            print("\npunctuation part!!!\n")
+                            break
+                    continue
+                
             # Get generic entities from query using vicuna
             prompt = createPrompt(query)
             vicuna_answer = getVicunaAnswer(prompt, vicuna_temperature)
@@ -1015,8 +1012,8 @@ def addToProfile():
     x = massUpdateLikesWeights.massUpdate()
     x.massUpdateGraphLikesRelationships()
 
-    # y = massPrune.massPrune()
-    # y.massPruneGraph()
+    y = massPrune.massPrune()
+    y.massPruneGraph()
 
     return 'hi'
 
