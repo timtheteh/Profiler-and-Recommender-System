@@ -43,7 +43,7 @@ for chunk in whiteListChunks:
     category_name = category_names[count]
     predefined_classes[category_name] = chunk
     count+=1
-predefined_classes['Locations'] = locations
+predefined_classes['Location'] = locations
 whitelist+=locations
 
 ### Create generic predefined "Class" nodes ###
