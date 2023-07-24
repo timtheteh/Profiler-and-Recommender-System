@@ -69,10 +69,11 @@ locations = locations_string.split("\n")
 
 ### Predefined Classes ###
 whiteListChunks = [whitelist[x:x+70] for x in range(0, len(whitelist), 70)]
-count = 1
+count = 0
 predefined_classes = {}
+category_names = ["Guards", "Commandos", "3rd Division", "Air Force", "GBAD", "Special Forces", "Intelligence", "Manpower", "Logistics"]
 for chunk in whiteListChunks:
-    category_name = "Category "+str(count)
+    category_name = category_names[count]
     predefined_classes[category_name] = chunk
     count+=1
 predefined_classes['Location'] = locations
