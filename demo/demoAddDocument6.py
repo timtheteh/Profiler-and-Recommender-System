@@ -36,7 +36,7 @@ for chunk in whiteListChunks:
     category_name = "Category "+str(count)
     predefined_classes[category_name] = chunk
     count+=1
-predefined_classes['Locations'] = locations
+predefined_classes['Location'] = locations
 
 list_of_texts = {'document 6': 'The ITMS team used UHF radios to log the S-Net data from Fort Canning Reservoir.'}
 
