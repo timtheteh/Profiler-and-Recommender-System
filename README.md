@@ -150,7 +150,9 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 **CASE 3:** Documents = 10, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a7316186-754e-4f1d-8ebe-696625452881)
 
+
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/7928fa62-8b31-498d-b9c7-f39f81b6e5fe)
+
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/d3145393-5b55-4296-ab2f-503eca72e8d5)
 
@@ -161,7 +163,9 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 **CASE 4:** Documents = 10, Weighted, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/f1346d95-d153-44e1-bb9a-b24d1909bfb9)
 
+
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/498d032a-7578-4a4d-aace-2578e39ec865)
+
 
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8f38dd9e-3e5a-4079-a684-8ff71c0c3a42)
 
