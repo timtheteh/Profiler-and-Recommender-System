@@ -141,7 +141,7 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 ## Test 2: How do 'Class' nodes help with the document recommendation?
 ### Result: 'Class' nodes improve the ranking of the documents, by forming seemingly unexpected connections between documents, hence forming a more robust 'for-you page' (similar to that of social media platforms)
 
-![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/63017060-da31-40c1-a908-7973b79328d8)
+![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a7316186-754e-4f1d-8ebe-696625452881)
 
 **CASE 3 & CASE 4:**
 - Documents which have more 'locations' entities:
@@ -149,14 +149,14 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 - User '127.0.0.1' (likes mainly 'locations'):
   - [cmpb 2, science park 3, rochor river 4, macritchie reservoir 5, changi 6, rochor 2, depot road 1, tekong 3, plab 5, jurong 2] did not search for document 7
 
-**CASE 3:** Documents = 20, Weighted, Classes
+**CASE 3:** Documents = 10, Weighted, Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/a5c2f2c2-d79d-44f6-9a0d-ead92aa444e6)
 
 **ORDER:**
 
 **Same:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
 
-**CASE 4:** Documents = 20, Weighted, No Classes
+**CASE 4:** Documents = 10, Weighted, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/8a623480-e027-4fe9-a00d-f3513993f544)
 
 **ORDER:**
