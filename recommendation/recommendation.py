@@ -304,7 +304,7 @@ timeToProjectGraph = time.time() - start_time
 sourceNodes = getUserInterestsAsSourceNodes(user_name=user_name)
 print(sourceNodes, '\n')
 start_time = time.time()
-recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document')
+recommendedDocument = personalisedPageRank(user_name=user_name, graph_name=graph_name, dampingFactor=0.85, typeOfNodeToRecommend='Document', sourceNodes=sourceNodes)
 timeToRecommendDocument = time.time() - start_time
 if recommendedDocument:
     documentEntities = getDocumentEntities(recommendedDocument)
