@@ -158,7 +158,7 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 
 **ORDER:**
 
-**Same:** 3, 19 **Different:** 6, 9, 4, 13, 1, 14, 2, 16, 7, 11, 18, 20, 10, 8, 12, 17, 15, 5
+**Same:** 3, 4, 1 **Different:** 9, 2, 8, 7, 6, 5, 10
 
 **CASE 4:** Documents = 10, Weighted, No Classes
 ![image](https://github.com/timtheteh/Profiler-and-Recommender-System/assets/76463517/f1346d95-d153-44e1-bb9a-b24d1909bfb9)
@@ -171,7 +171,7 @@ In addition, the weighted case shows an extremely confident answer in its recomm
 
 **ORDER:**
 
-**Same:** 3, 19 **Different:** 13, 6, 9, 4, 14, 10, 2, 12, 16, 18, 1, 20, 11. **Zeros:** 15, 17, 5, 7, 8
+**Same:** 3, 4, 1 **Different:** 2, 9, 7, 6, 8 **Zeros:** 10, 5
 
 ## Analysis
 
